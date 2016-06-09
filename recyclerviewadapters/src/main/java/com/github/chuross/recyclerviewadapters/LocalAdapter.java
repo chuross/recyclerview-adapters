@@ -15,9 +15,9 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
 
     void onBindViewHolder(@NonNull final VH holder, final int position);
 
-    CombinableRecyclerAdapter getParentAdapter();
+    CompositeRecyclerAdapter getParentAdapter();
 
-    void bindParentAdapter(@Nullable CombinableRecyclerAdapter adapter);
+    void bindParentAdapter(@Nullable CompositeRecyclerAdapter adapter);
 
     void unBindParentAdapter();
 

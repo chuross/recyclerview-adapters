@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 
-public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<LocalAdapter<?>> localAdapters = new ArrayList<>();
     private Map<Integer, LocalAdapter<?>> localAdapterMapping = new HashMap<>();
