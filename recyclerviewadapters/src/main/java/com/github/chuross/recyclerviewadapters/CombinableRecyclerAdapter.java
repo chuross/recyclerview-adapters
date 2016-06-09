@@ -2,11 +2,15 @@ package com.github.chuross.recyclerviewadapters;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 
@@ -17,12 +21,11 @@ public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(final int position) {
-        final Pair<Integer, LocalAdapter> info = getLocalAdapterInfo(position);
-
-        if (info == null) {
-            throw new IllegalStateException("CombinableAdapter is not found.");
+        final LocalAdapterItem item = getLocalAdapterItem(position);
+        if (item == null) {
+            throw new IllegalStateException("LocalAdapterItem is not found.");
         }
-        return info.second.getAdapterType();
+        return item.getLocalAdapter().getAdapterType();
     }
 
     @NonNull
@@ -33,16 +36,11 @@ public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        final Pair<Integer, LocalAdapter> info = getLocalAdapterInfo(position);
-
-        if (info == null) {
+        final LocalAdapterItem item = getLocalAdapterItem(position);
+        if (item == null) {
             return;
         }
-
-        final int localAdapterPosition = info.first;
-        final LocalAdapter localAdapter = info.second;
-
-        localAdapter.onBindViewHolder(holder, localAdapterPosition);
+        item.getLocalAdapter().onBindViewHolder(holder, item.getLocalAdapterPosition());
     }
 
     @Override
@@ -51,12 +49,12 @@ public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Nullable
-    private Pair<Integer, LocalAdapter> getLocalAdapterInfo(final int position) {
+    public LocalAdapterItem getLocalAdapterItem(final int position) {
         int offset = 0;
         for (LocalAdapter localAdapter : localAdapters) {
             if (position < (offset + localAdapter.getItemCount())) {
                 int localAdapterPosition = position - offset;
-                return Pair.create(localAdapterPosition, localAdapter);
+                return new LocalAdapterItem(localAdapterPosition, localAdapter);
             }
             offset += localAdapter.getItemCount();
         }
@@ -69,11 +67,6 @@ public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             size += localAdapter.getItemCount();
         }
         return size;
-    }
-
-    public int getPositionFromParent(int position) {
-        Pair<Integer, LocalAdapter> info = getLocalAdapterInfo(position);
-        return info != null ? info.first : -1;
     }
 
     public void add(@NonNull LocalAdapter<?> localAdapter) {

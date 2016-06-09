@@ -38,12 +38,16 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
         final RecyclerView recyclerView = ((RecyclerView) v.getParent());
         int parentAdapterPosition = recyclerView.getChildAdapterPosition(v);
 
-        if (hasParentAdapter()) {
-            int localAdapterPosition = getParentAdapter().getPositionFromParent(parentAdapterPosition);
-            listener.onItemClicked(recyclerView.getChildViewHolder(v), localAdapterPosition, get(localAdapterPosition));
-        } else {
+        if (!hasParentAdapter()) {
             listener.onItemClicked(recyclerView.getChildViewHolder(v), parentAdapterPosition, get(parentAdapterPosition));
+            return;
         }
+
+        LocalAdapterItem localAdapterItem = getParentAdapter().getLocalAdapterItem(parentAdapterPosition);
+        if (localAdapterItem == null) return;
+
+        int localAdapterPosition = localAdapterItem.getLocalAdapterPosition();
+        listener.onItemClicked(recyclerView.getChildViewHolder(v), localAdapterPosition, get(localAdapterPosition));
     }
 
     @Override
