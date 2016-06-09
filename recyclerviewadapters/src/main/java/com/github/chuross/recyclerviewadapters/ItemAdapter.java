@@ -36,13 +36,13 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
         if (listener == null || v == null) return;
 
         final RecyclerView recyclerView = ((RecyclerView) v.getParent());
-        int globalAdapterPosition = recyclerView.getChildAdapterPosition(v);
+        int parentAdapterPosition = recyclerView.getChildAdapterPosition(v);
 
         if (hasParentAdapter()) {
-            int combinableAdapterPosition = getParentAdapter().getCombinableAdapterItemPosition(globalAdapterPosition);
-            listener.onItemClicked(recyclerView.getChildViewHolder(v), combinableAdapterPosition, get(combinableAdapterPosition));
+            int localAdapterPosition = getParentAdapter().getPositionFromParent(parentAdapterPosition);
+            listener.onItemClicked(recyclerView.getChildViewHolder(v), localAdapterPosition, get(localAdapterPosition));
         } else {
-            listener.onItemClicked(recyclerView.getChildViewHolder(v), globalAdapterPosition, get(globalAdapterPosition));
+            listener.onItemClicked(recyclerView.getChildViewHolder(v), parentAdapterPosition, get(parentAdapterPosition));
         }
     }
 

@@ -12,12 +12,12 @@ import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersU
 
 public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<LocalAdapter<?>> combinables = new ArrayList<>();
-    private Map<Integer, LocalAdapter<?>> combinableMapping = new HashMap<>();
+    private List<LocalAdapter<?>> localAdapters = new ArrayList<>();
+    private Map<Integer, LocalAdapter<?>> localAdapterMapping = new HashMap<>();
 
     @Override
     public int getItemViewType(final int position) {
-        final Pair<Integer, LocalAdapter> info = getCombinableInfo(position);
+        final Pair<Integer, LocalAdapter> info = getLocalAdapterInfo(position);
 
         if (info == null) {
             throw new IllegalStateException("CombinableAdapter is not found.");
@@ -28,21 +28,21 @@ public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int adapterType) {
-        return combinableMapping.get(adapterType).onCreateViewHolder(parent, adapterType);
+        return localAdapterMapping.get(adapterType).onCreateViewHolder(parent, adapterType);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        final Pair<Integer, LocalAdapter> info = getCombinableInfo(position);
+        final Pair<Integer, LocalAdapter> info = getLocalAdapterInfo(position);
 
         if (info == null) {
             return;
         }
 
-        final int combinableAdapterPosition = info.first;
-        final LocalAdapter combinableAdapter = info.second;
+        final int localAdapterPosition = info.first;
+        final LocalAdapter localAdapter = info.second;
 
-        combinableAdapter.onBindViewHolder(holder, combinableAdapterPosition);
+        localAdapter.onBindViewHolder(holder, localAdapterPosition);
     }
 
     @Override
@@ -51,66 +51,66 @@ public class CombinableRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Nullable
-    private Pair<Integer, LocalAdapter> getCombinableInfo(final int position) {
+    private Pair<Integer, LocalAdapter> getLocalAdapterInfo(final int position) {
         int offset = 0;
-        for (LocalAdapter combinable : combinables) {
-            if (position < (offset + combinable.getItemCount())) {
-                int combinableAdapterPosition = position - offset;
-                return Pair.create(combinableAdapterPosition, combinable);
+        for (LocalAdapter localAdapter : localAdapters) {
+            if (position < (offset + localAdapter.getItemCount())) {
+                int localAdapterPosition = position - offset;
+                return Pair.create(localAdapterPosition, localAdapter);
             }
-            offset += combinable.getItemCount();
+            offset += localAdapter.getItemCount();
         }
         return null;
     }
 
     private int getTotalCount() {
         int size = 0;
-        for (LocalAdapter combinable : combinables) {
-            size += combinable.getItemCount();
+        for (LocalAdapter localAdapter : localAdapters) {
+            size += localAdapter.getItemCount();
         }
         return size;
     }
 
-    public int getCombinableAdapterItemPosition(int position) {
-        Pair<Integer, LocalAdapter> info = getCombinableInfo(position);
+    public int getPositionFromParent(int position) {
+        Pair<Integer, LocalAdapter> info = getLocalAdapterInfo(position);
         return info != null ? info.first : -1;
     }
 
-    public void add(@NonNull LocalAdapter<?> combinable) {
-        checkNonNull(combinable);
-        combinables.add(combinable);
-        combinableMapping.put(combinable.getAdapterType(), combinable);
-        combinable.bindParentAdapter(this);
+    public void add(@NonNull LocalAdapter<?> localAdapter) {
+        checkNonNull(localAdapter);
+        localAdapters.add(localAdapter);
+        localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
+        localAdapter.bindParentAdapter(this);
         notifyDataSetChanged();
     }
 
-    public void add(int index, @NonNull LocalAdapter<?> combinable) {
-        checkNonNull(combinable);
-        combinables.add(index, combinable);
-        combinableMapping.put(combinable.getAdapterType(), combinable);
-        combinable.bindParentAdapter(this);
+    public void add(int index, @NonNull LocalAdapter<?> localAdapter) {
+        checkNonNull(localAdapter);
+        localAdapters.add(index, localAdapter);
+        localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
+        localAdapter.bindParentAdapter(this);
         notifyDataSetChanged();
     }
 
-    public void addAll(@NonNull LocalAdapter<?>... combinables) {
-        addAll(Arrays.asList(combinables));
+    public void addAll(@NonNull LocalAdapter<?>... localAdapters) {
+        addAll(Arrays.asList(localAdapters));
     }
 
-    public void addAll(@NonNull Collection<LocalAdapter<?>> combinables) {
-        checkNonNull(combinables);
-        this.combinables.addAll(combinables);
-        for (LocalAdapter combinable : combinables) {
-            combinableMapping.put(combinable.getAdapterType(), combinable);
-            combinable.bindParentAdapter(this);
+    public void addAll(@NonNull Collection<LocalAdapter<?>> localAdapters) {
+        checkNonNull(localAdapters);
+        this.localAdapters.addAll(localAdapters);
+        for (LocalAdapter localAdapter : localAdapters) {
+            localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
+            localAdapter.bindParentAdapter(this);
         }
         notifyDataSetChanged();
     }
 
-    public void remove(@NonNull LocalAdapter<?> combinable) {
-        checkNonNull(combinable);
-        combinables.remove(combinable);
-        combinableMapping.remove(combinable.getAdapterType());
-        combinable.unBindParentAdapter();
+    public void remove(@NonNull LocalAdapter<?> localAdapter) {
+        checkNonNull(localAdapter);
+        localAdapters.remove(localAdapter);
+        localAdapterMapping.remove(localAdapter.getAdapterType());
+        localAdapter.unBindParentAdapter();
         notifyDataSetChanged();
     }
 }
