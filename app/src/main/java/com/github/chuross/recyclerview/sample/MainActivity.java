@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
 import com.github.chuross.recyclerviewadapters.ItemAdapter;
+import com.github.chuross.recyclerviewadapters.OnItemClickListener;
 import com.github.chuross.recyclerviewadapters.ViewItem;
 
 
@@ -43,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         itemAdapter1.add("itemAdapter1#default");
+        itemAdapter1.setOnItemClickListener(new OnItemClickListener<String>() {
+            @Override
+            public void onItemClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
+                Toast.makeText(holder.itemView.getContext(), "click! adapter1:: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         final ItemAdapter<String, RecyclerView.ViewHolder> itemAdapter2 = new ItemAdapter<String, RecyclerView.ViewHolder>(this) {
             @Override
@@ -63,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         itemAdapter2.add("itemAdapter2#default");
+        itemAdapter2.setOnItemClickListener(new OnItemClickListener<String>() {
+            @Override
+            public void onItemClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
+                Toast.makeText(holder.itemView.getContext(), "click! adapter2:: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         ViewItem viewItem1 = new ViewItem(this, R.layout.item_hello_world);
         ViewItem viewItem2 = new ViewItem(this, R.layout.item_append_buttom) {
