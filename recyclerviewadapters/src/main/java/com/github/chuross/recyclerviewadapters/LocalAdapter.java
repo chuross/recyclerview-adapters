@@ -15,9 +15,21 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
      */
     int getAdapterType();
 
+    void onAttachedToRecyclerView(RecyclerView recyclerView);
+
     VH onCreateViewHolder(@NonNull final ViewGroup parent, int adapterType);
 
+    void onViewRecycled(RecyclerView.ViewHolder holder);
+
+    boolean onFailedToRecycleView(RecyclerView.ViewHolder holder);
+
+    void onViewAttachedToWindow(RecyclerView.ViewHolder holder);
+
     void onBindViewHolder(@NonNull final VH holder, final int position);
+
+    void onViewDetachedFromWindow(RecyclerView.ViewHolder holder);
+
+    void onDetachedFromRecyclerView(RecyclerView recyclerView);
 
     CompositeRecyclerAdapter getParentAdapter();
 

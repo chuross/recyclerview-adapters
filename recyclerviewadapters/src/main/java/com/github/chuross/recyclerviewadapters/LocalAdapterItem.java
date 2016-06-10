@@ -16,6 +16,7 @@ public class LocalAdapterItem {
         return localAdapterPosition;
     }
 
+    @NonNull
     public LocalAdapter getLocalAdapter() {
         return localAdapter;
     }

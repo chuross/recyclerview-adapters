@@ -17,6 +17,28 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
     }
 
     @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+    }
+
+    @Override
+    public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
+        return false;
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+    }
+
+    /**
+     * LocalAdapter require one layout resource.
+     * Use CompositeRecyclerAdapter, if you want to build multiple layout adapter.
+     */
+    @Override
+    @Deprecated
     public final int getItemViewType(int position) {
         return 0;
     }

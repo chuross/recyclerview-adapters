@@ -27,23 +27,71 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     };
 
     @Override
-    public int getItemViewType(final int position) {
+    public final int getItemViewType(final int position) {
         final LocalAdapterItem item = getLocalAdapterItem(position);
         if (item == null) throw new IllegalStateException("LocalAdapterItem is not found.");
         return item.getLocalAdapter().getAdapterType();
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        for (LocalAdapter<?> localAdapter : localAdapters) {
+            localAdapter.onAttachedToRecyclerView(recyclerView);
+        }
+    }
+
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int adapterType) {
+    public final RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int adapterType) {
         return localAdapterMapping.get(adapterType).onCreateViewHolder(parent, adapterType);
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        final LocalAdapterItem item = getLocalAdapterItem(position);
-        if (item == null) return;
-        item.getLocalAdapter().onBindViewHolder(holder, item.getLocalAdapterPosition());
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        LocalAdapterItem localAdapterItem = getLocalAdapterItem(holder.getAdapterPosition());
+        if (localAdapterItem == null) return;
+        localAdapterItem.getLocalAdapter().onViewRecycled(holder);
+    }
+
+    @Override
+    public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
+        LocalAdapterItem localAdapterItem = getLocalAdapterItem(holder.getAdapterPosition());
+        if (localAdapterItem == null) super.onFailedToRecycleView(holder);
+        localAdapterItem.getLocalAdapter().onFailedToRecycleView(holder);
+        return super.onFailedToRecycleView(holder);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        LocalAdapterItem localAdapterItem = getLocalAdapterItem(holder.getAdapterPosition());
+        if (localAdapterItem == null) return;
+        localAdapterItem.getLocalAdapter().onViewAttachedToWindow(holder);
+    }
+
+    @Override
+    public final void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        final LocalAdapterItem localAdapterItem = getLocalAdapterItem(position);
+        if (localAdapterItem == null) return;
+        localAdapterItem.getLocalAdapter().onBindViewHolder(holder, localAdapterItem.getLocalAdapterPosition());
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        LocalAdapterItem localAdapterItem = getLocalAdapterItem(holder.getAdapterPosition());
+        if (localAdapterItem == null) return;
+        localAdapterItem.getLocalAdapter().onViewDetachedFromWindow(holder);
+        super.onViewDetachedFromWindow(holder);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        for (LocalAdapter<?> localAdapter : localAdapters) {
+            localAdapter.onDetachedFromRecyclerView(recyclerView);
+        }
+        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     @Override
