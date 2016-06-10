@@ -6,13 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-public class ViewItem extends BaseLocalAdapter<RecyclerView.ViewHolder> {
+public class ViewItem extends BaseLocalAdapter<RecyclerView.ViewHolder> implements Cloneable {
 
     private int layoutResourceId;
-
-    public ViewItem(@NonNull ViewItem item) {
-        this(item.getContext(), item.getAdapterType());
-    }
 
     public ViewItem(@NonNull Context context, int layoutResourceId) {
         super(context);
@@ -38,5 +34,10 @@ public class ViewItem extends BaseLocalAdapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return 1;
+    }
+
+    @Override
+    public ViewItem clone() {
+        return new ViewItem(getContext(), layoutResourceId);
     }
 }

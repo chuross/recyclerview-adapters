@@ -107,7 +107,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return size;
     }
 
-    public int getAdapterCount() {
+    public int getLocalAdapterCount() {
         return localAdapters.size();
     }
 
