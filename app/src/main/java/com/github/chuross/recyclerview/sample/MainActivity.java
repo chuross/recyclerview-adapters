@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public int getAdapterType() {
+            public int getAdapterId() {
                 return R.layout.item_adapter_1;
             }
         };
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public int getAdapterType() {
+            public int getAdapterId() {
                 return R.layout.item_adapter_2;
             }
         };
@@ -92,9 +92,10 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) holder.itemView.findViewById(R.id.text)).setText(get(position));
             }
 
+            // Replace adapterId, if you want to same layout ItemAdapter.
             @Override
-            public int getAdapterType() {
-                return R.layout.item_adapter_1;
+            public int getAdapterId() {
+                return R.id.extra_item_adapter;
             }
         };
         itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");

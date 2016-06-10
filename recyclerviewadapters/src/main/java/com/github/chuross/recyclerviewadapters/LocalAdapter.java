@@ -13,11 +13,11 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
      * static identity
      * ex) R.layout, R.id
      */
-    int getAdapterType();
+    int getAdapterId();
 
     void onAttachedToRecyclerView(RecyclerView recyclerView);
 
-    VH onCreateViewHolder(@NonNull final ViewGroup parent, int adapterType);
+    VH onCreateViewHolder(@NonNull final ViewGroup parent, int adapterId);
 
     void onViewRecycled(RecyclerView.ViewHolder holder);
 

@@ -16,7 +16,7 @@ public class ViewItem extends BaseLocalAdapter<RecyclerView.ViewHolder> implemen
     }
 
     @Override
-    public int getAdapterType() {
+    public int getAdapterId() {
         return layoutResourceId;
     }
 

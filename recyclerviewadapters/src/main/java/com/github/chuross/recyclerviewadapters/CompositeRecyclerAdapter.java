@@ -27,7 +27,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         if (item == null) throw new IllegalStateException("LocalAdapterItem is not found.");
 
-        return item.getLocalAdapter().getAdapterType();
+        return item.getLocalAdapter().getAdapterId();
     }
 
     @Override
@@ -40,8 +40,8 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @NonNull
     @Override
-    public final RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int adapterType) {
-        return localAdapterMapping.get(adapterType).onCreateViewHolder(parent, adapterType);
+    public final RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int adapterId) {
+        return localAdapterMapping.get(adapterId).onCreateViewHolder(parent, adapterId);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public void add(@NonNull LocalAdapter<?> localAdapter) {
         checkNonNull(localAdapter);
         localAdapters.add(localAdapter);
-        localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
+        localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
         localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
         notifyDataSetChanged();
     }
@@ -152,7 +152,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public void add(int index, @NonNull LocalAdapter<?> localAdapter) {
         checkNonNull(localAdapter);
         localAdapters.add(index, localAdapter);
-        localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
+        localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
         localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
         notifyDataSetChanged();
     }
@@ -165,7 +165,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         checkNonNull(localAdapters);
         this.localAdapters.addAll(localAdapters);
         for (LocalAdapter localAdapter : localAdapters) {
-            localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
+            localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
             localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
         }
         notifyDataSetChanged();
@@ -174,7 +174,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public void remove(@NonNull LocalAdapter<?> localAdapter) {
         checkNonNull(localAdapter);
         localAdapters.remove(localAdapter);
-        localAdapterMapping.remove(localAdapter.getAdapterType());
+        localAdapterMapping.remove(localAdapter.getAdapterId());
         localAdapter.unBindParentAdapter();
         notifyDataSetChanged();
     }
