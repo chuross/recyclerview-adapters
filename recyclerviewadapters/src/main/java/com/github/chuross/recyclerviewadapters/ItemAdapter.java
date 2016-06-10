@@ -68,25 +68,27 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public void add(@NonNull T item) {
         checkNonNull(item);
         items.add(item);
-        notifyDataSetChanged();
+        notifyItemInserted(items.size() - 1);
     }
 
     public void add(int index, @NonNull T item) {
         checkNonNull(item);
         items.add(index, item);
-        notifyDataSetChanged();
+        notifyItemInserted(index);
     }
 
     public void addAll(Collection<T> items) {
         checkNonNull(items);
         this.items.addAll(items);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(this.items.size() - items.size(), items.size());
     }
 
     public void remove(@NonNull T item) {
         checkNonNull(item);
+        int index = items.indexOf(item);
+        if (index < 0) return;
         items.remove(item);
-        notifyDataSetChanged();
+        notifyItemRemoved(index);
     }
 
     public void setOnItemClickListener(@Nullable OnItemClickListener<T> listener) {

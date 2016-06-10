@@ -1,8 +1,8 @@
 package com.github.chuross.recyclerview.sample;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
-                        compositeAdapter.notifyDataSetChanged();
+                        itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
                     }
                 });
             }
