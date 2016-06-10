@@ -22,6 +22,11 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
         super(context);
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public abstract VH onCreateViewHolder(@NonNull ViewGroup parent);
 
     @Override
