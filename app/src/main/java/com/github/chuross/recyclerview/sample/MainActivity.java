@@ -78,6 +78,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // same as itemAdapter1 layout resource
+        final ItemAdapter<String, RecyclerView.ViewHolder> itemAdapter3 = new ItemAdapter<String, RecyclerView.ViewHolder>(this) {
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+                return new RecyclerView.ViewHolder(inflater.inflate(R.layout.item_adapter_1, parent, false)) {
+                };
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                ((TextView) holder.itemView.findViewById(R.id.text)).setText(get(position));
+            }
+
+            @Override
+            public int getAdapterType() {
+                return R.layout.item_adapter_1;
+            }
+        };
+        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
+        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
+        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
+
         ViewItem viewItem1 = new ViewItem(this, R.layout.item_hello_world);
         ViewItem viewItem2 = new ViewItem(this, R.layout.item_append_buttom) {
             @Override
@@ -110,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
             viewItem1,
             itemAdapter1,
             viewItem2,
-            itemAdapter2,
-            ViewItem3
+            ...
         );
          */
         compositeAdapter.add(viewItem1);
@@ -119,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         compositeAdapter.add(viewItem2);
         compositeAdapter.add(itemAdapter2);
         compositeAdapter.add(viewItem3);
+        compositeAdapter.add(itemAdapter3);
         compositeAdapter.add(viewItem4);
         compositeAdapter.add(viewItem5);
 
