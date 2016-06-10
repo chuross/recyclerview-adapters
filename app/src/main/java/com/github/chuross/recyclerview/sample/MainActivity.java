@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         itemAdapter2.add("itemAdapter2#" + String.valueOf(itemAdapter2.getItemCount()));
-                        compositeAdapter.notifyDataSetChanged();
                     }
                 });
             }

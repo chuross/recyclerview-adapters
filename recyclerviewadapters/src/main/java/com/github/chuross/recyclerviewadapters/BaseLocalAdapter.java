@@ -17,16 +17,22 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
     }
 
     @Override
+    public final int getItemViewType(int position) {
+        return 0;
+    }
+
+    @Override
     public CompositeRecyclerAdapter getParentAdapter() {
         return hasParentAdapter() ? parentAdapter.get() : null;
     }
 
     @Override
-    public void bindParentAdapter(@Nullable CompositeRecyclerAdapter adapter) {
+    public void bindParentAdapter(@Nullable CompositeRecyclerAdapter adapter, @Nullable RecyclerView.AdapterDataObserver dataObserver) {
         if (hasParentAdapter()) {
             throw new IllegalStateException("Adapter already has parentAdapter.");
         }
         parentAdapter = new WeakReference<>(adapter);
+        registerAdapterDataObserver(dataObserver);
     }
 
     @Override

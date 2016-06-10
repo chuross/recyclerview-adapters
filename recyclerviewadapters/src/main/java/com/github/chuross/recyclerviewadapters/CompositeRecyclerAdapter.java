@@ -18,13 +18,18 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private List<LocalAdapter<?>> localAdapters = new ArrayList<>();
     private Map<Integer, LocalAdapter<?>> localAdapterMapping = new HashMap<>();
+    private RecyclerView.AdapterDataObserver dataObserver = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            notifyDataSetChanged();
+        }
+    };
 
     @Override
     public int getItemViewType(final int position) {
         final LocalAdapterItem item = getLocalAdapterItem(position);
-        if (item == null) {
-            throw new IllegalStateException("LocalAdapterItem is not found.");
-        }
+        if (item == null) throw new IllegalStateException("LocalAdapterItem is not found.");
         return item.getLocalAdapter().getAdapterType();
     }
 
@@ -37,15 +42,29 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final LocalAdapterItem item = getLocalAdapterItem(position);
-        if (item == null) {
-            return;
-        }
+        if (item == null) return;
         item.getLocalAdapter().onBindViewHolder(holder, item.getLocalAdapterPosition());
     }
 
     @Override
     public int getItemCount() {
         return getTotalCount();
+    }
+
+    private int getTotalCount() {
+        int size = 0;
+        for (LocalAdapter localAdapter : localAdapters) {
+            size += localAdapter.getItemCount();
+        }
+        return size;
+    }
+
+    public int getAdapterCount() {
+        return localAdapters.size();
+    }
+
+    public LocalAdapter<?> getLocalAdapter(int index) {
+        return localAdapters.get(index);
     }
 
     @Nullable
@@ -61,19 +80,11 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return null;
     }
 
-    private int getTotalCount() {
-        int size = 0;
-        for (LocalAdapter localAdapter : localAdapters) {
-            size += localAdapter.getItemCount();
-        }
-        return size;
-    }
-
     public void add(@NonNull LocalAdapter<?> localAdapter) {
         checkNonNull(localAdapter);
         localAdapters.add(localAdapter);
         localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
-        localAdapter.bindParentAdapter(this);
+        localAdapter.bindParentAdapter(this, dataObserver);
         notifyDataSetChanged();
     }
 
@@ -81,7 +92,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         checkNonNull(localAdapter);
         localAdapters.add(index, localAdapter);
         localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
-        localAdapter.bindParentAdapter(this);
+        localAdapter.bindParentAdapter(this, dataObserver);
         notifyDataSetChanged();
     }
 
@@ -94,7 +105,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         this.localAdapters.addAll(localAdapters);
         for (LocalAdapter localAdapter : localAdapters) {
             localAdapterMapping.put(localAdapter.getAdapterType(), localAdapter);
-            localAdapter.bindParentAdapter(this);
+            localAdapter.bindParentAdapter(this, dataObserver);
         }
         notifyDataSetChanged();
     }

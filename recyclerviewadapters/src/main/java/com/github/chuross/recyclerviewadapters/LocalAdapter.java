@@ -9,6 +9,10 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
 
     int getItemCount();
 
+    /**
+     * static identity
+     * ex) R.layout, R.id
+     */
     int getAdapterType();
 
     VH onCreateViewHolder(@NonNull final ViewGroup parent, int adapterType);
@@ -17,7 +21,7 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
 
     CompositeRecyclerAdapter getParentAdapter();
 
-    void bindParentAdapter(@Nullable CompositeRecyclerAdapter adapter);
+    void bindParentAdapter(@Nullable CompositeRecyclerAdapter adapter, @Nullable RecyclerView.AdapterDataObserver dataObserver);
 
     void unBindParentAdapter();
 
