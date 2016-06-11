@@ -4,8 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.github.chuross.recyclerviewadapters.internal.EventExecutor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,46 +17,114 @@ import java.util.List;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 
-public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends BaseLocalAdapter<VH> implements View.OnClickListener {
+public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends BaseLocalAdapter<VH> implements RecyclerView.OnItemTouchListener {
 
     private final List<T> items = new ArrayList<>();
-    private OnItemClickListener<T> listener;
+    private OnItemClickListener<T> clickListener;
+    private OnItemDoubleClickListener<T> doubleClickListener;
+    private OnItemLongPressedListener<T> longPressedListener;
+    private GestureDetector gestureDetector;
 
     public ItemAdapter(@NonNull Context context) {
         super(context);
     }
+
+    public abstract VH onCreateViewHolder(@NonNull ViewGroup parent);
 
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    public abstract VH onCreateViewHolder(@NonNull ViewGroup parent);
-
     @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        VH holder = onCreateViewHolder(parent);
-        holder.itemView.setOnClickListener(this);
-        return holder;
+    public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public void onLongPress(MotionEvent e) {
+                if (longPressedListener == null) return;
+
+                executeGestureEvent(recyclerView, e, new EventExecutor() {
+                    @Override
+                    public void execute(@NonNull View view, int position) {
+                        longPressedListener.onItemLongPressed(recyclerView.getChildViewHolder(view), position, get(position));
+                    }
+                });
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                if (clickListener == null) return true;
+
+                executeGestureEvent(recyclerView, e, new EventExecutor() {
+                    @Override
+                    public void execute(@NonNull View view, int position) {
+                        clickListener.onItemClicked(recyclerView.getChildViewHolder(view), position, get(position));
+                    }
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                if (doubleClickListener == null) return true;
+
+                executeGestureEvent(recyclerView, e, new EventExecutor() {
+                    @Override
+                    public void execute(@NonNull View view, int position) {
+                        doubleClickListener.onItemDoubleClicked(recyclerView.getChildViewHolder(view), position, get(position));
+                    }
+                });
+                return true;
+            }
+        });
+        gestureDetector.setIsLongpressEnabled(true);
+        recyclerView.addOnItemTouchListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (listener == null || v == null) return;
+    private void executeGestureEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent ev, @Nullable EventExecutor executor) {
+        if (executor == null) return;
 
-        final RecyclerView recyclerView = ((RecyclerView) v.getParent());
-        int parentAdapterPosition = recyclerView.getChildAdapterPosition(v);
+        final View child = recyclerView.findChildViewUnder(ev.getX(), ev.getY());
 
+        if (child == null) return;
+
+        int parentAdapterPosition = recyclerView.getChildAdapterPosition(child);
         if (!hasParentAdapter()) {
-            listener.onItemClicked(recyclerView.getChildViewHolder(v), parentAdapterPosition, get(parentAdapterPosition));
+            executor.execute(child, parentAdapterPosition);
+            return;
+        }
+        LocalAdapterItem localAdapterItem = getParentAdapter().getLocalAdapterItem(parentAdapterPosition);
+        if (localAdapterItem == null || localAdapterItem.getLocalAdapter() != ItemAdapter.this) {
             return;
         }
 
-        LocalAdapterItem localAdapterItem = getParentAdapter().getLocalAdapterItem(parentAdapterPosition);
-        if (localAdapterItem == null) return;
-
         int localAdapterPosition = localAdapterItem.getLocalAdapterPosition();
-        listener.onItemClicked(recyclerView.getChildViewHolder(v), localAdapterPosition, get(localAdapterPosition));
+        executor.execute(child, localAdapterPosition);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        recyclerView.removeOnItemTouchListener(this);
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    @Override
+    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return onCreateViewHolder(parent);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        return gestureDetector.onTouchEvent(e);
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
     }
 
     @Override
@@ -97,7 +169,15 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
         notifyItemRangeRemoved(0, size);
     }
 
-    public void setOnItemClickListener(@Nullable OnItemClickListener<T> listener) {
-        this.listener = listener;
+    public void setOnItemClickListener(@Nullable OnItemClickListener<T> clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public void setOnItemDoubleClickListener(@Nullable OnItemDoubleClickListener<T> doubleClickListener) {
+        this.doubleClickListener = doubleClickListener;
+    }
+
+    public void setOnItemLongPressListener(@Nullable OnItemLongPressedListener<T> longPressListener) {
+        this.longPressedListener = longPressListener;
     }
 }

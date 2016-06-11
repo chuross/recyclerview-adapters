@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
 import com.github.chuross.recyclerviewadapters.ItemAdapter;
 import com.github.chuross.recyclerviewadapters.OnItemClickListener;
+import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
+import com.github.chuross.recyclerviewadapters.OnItemLongPressedListener;
 import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
 import com.github.chuross.recyclerviewadapters.ViewItem;
 
@@ -52,6 +54,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
                 Toast.makeText(holder.itemView.getContext(), "click! adapter1:: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
+        itemAdapter1.setOnItemDoubleClickListener(new OnItemDoubleClickListener<String>() {
+            @Override
+            public void onItemDoubleClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
+                Toast.makeText(holder.itemView.getContext(), "double click! adapter1:: " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
+        itemAdapter1.setOnItemLongPressListener(new OnItemLongPressedListener<String>() {
+            @Override
+            public void onItemLongPressed(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
+                Toast.makeText(holder.itemView.getContext(), "long press! adapter1:: " + item, Toast.LENGTH_SHORT).show();
             }
         });
 
