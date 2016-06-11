@@ -208,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
                 .bind(viewItem3, SPAN_SIZE)
                 .bind(viewItem6, SPAN_SIZE)
                 .bind(viewItemAdapter, SPAN_SIZE)
-                .bind(viewItemAdapter, SPAN_SIZE)
                 .bind(itemAdapter1, 2, 1) //can set spanSize separately.
                 .build());
 
