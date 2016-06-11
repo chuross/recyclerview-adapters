@@ -178,4 +178,13 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         localAdapter.unBindParentAdapter();
         notifyDataSetChanged();
     }
+
+    public void clear() {
+        for (LocalAdapter<?> localAdapter : localAdapters) {
+            localAdapter.unBindParentAdapter();
+        }
+        localAdapters.clear();
+        localAdapterMapping.clear();
+        notifyDataSetChanged();
+    }
 }

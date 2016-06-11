@@ -91,6 +91,12 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
         notifyItemRemoved(index);
     }
 
+    public void clear() {
+        int size = items.size();
+        items.clear();
+        notifyItemRangeRemoved(0, size);
+    }
+
     public void setOnItemClickListener(@Nullable OnItemClickListener<T> listener) {
         this.listener = listener;
     }
