@@ -3,7 +3,7 @@ package com.github.chuross.recyclerview.sample;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +14,13 @@ import android.widget.Toast;
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
 import com.github.chuross.recyclerviewadapters.ItemAdapter;
 import com.github.chuross.recyclerviewadapters.OnItemClickListener;
+import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
 import com.github.chuross.recyclerviewadapters.ViewItem;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int SPAN_SIZE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +150,27 @@ public class MainActivity extends AppCompatActivity {
         compositeAdapter.add(viewItem5);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        /*
+         * simple LinearLayoutManager example
+         */
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        /*
+         * Use SpanSizeLookupBuilder, if you want to use GridLayoutManager with SpanSizeLookup.
+         */
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SPAN_SIZE);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        gridLayoutManager.setSpanSizeLookup(new SpanSizeLookupBuilder(this, compositeAdapter)
+                .bind(viewItem1, SPAN_SIZE)
+                .bind(viewItem2, SPAN_SIZE)
+                .bind(viewItem3, SPAN_SIZE)
+                .bind(viewItem4, SPAN_SIZE)
+                .bind(viewItem5, SPAN_SIZE)
+                .bind(itemAdapter1, 2)
+                .build());
+
         recyclerView.setAdapter(compositeAdapter);
     }
 }
