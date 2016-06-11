@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 .bind(viewItem3, SPAN_SIZE)
                 .bind(viewItem4, SPAN_SIZE)
                 .bind(viewItem5, SPAN_SIZE)
-                .bind(itemAdapter1, 2)
+                .bind(itemAdapter1, 2, 1) //can set spanSize separately.
                 .build());
 
         recyclerView.setAdapter(compositeAdapter);
