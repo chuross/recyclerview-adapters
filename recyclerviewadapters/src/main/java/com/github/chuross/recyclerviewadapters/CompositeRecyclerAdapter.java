@@ -20,6 +20,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private List<LocalAdapter<?>> localAdapters = new ArrayList<>();
     private Map<Integer, LocalAdapter<?>> localAdapterMapping = new HashMap<>();
+    private Map<Integer, LocalAdapter<?>> unstableAdapterMapping = new HashMap<>();
 
     @Override
     public final int getItemViewType(final int position) {
@@ -27,7 +28,15 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         if (item == null) throw new IllegalStateException("LocalAdapterItem is not found.");
 
-        return item.getLocalAdapter().getAdapterId();
+        final LocalAdapter<?> localAdapter = item.getLocalAdapter();
+
+        if (localAdapter.hasStableItemViewType()) {
+            return localAdapter.getAdapterId();
+        }
+
+        final int itemViewType = localAdapter.getItemViewType(position);
+        unstableAdapterMapping.put(itemViewType, localAdapter);
+        return itemViewType;
     }
 
     @Override
@@ -40,8 +49,11 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @NonNull
     @Override
-    public final RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int adapterId) {
-        return localAdapterMapping.get(adapterId).onCreateViewHolder(parent, adapterId);
+    public final RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int itemViewType) {
+        if (localAdapterMapping.containsKey(itemViewType)) {
+            return localAdapterMapping.get(itemViewType).onCreateViewHolder(parent, itemViewType);
+        }
+        return unstableAdapterMapping.get(itemViewType).onCreateViewHolder(parent, itemViewType);
     }
 
     @Override
@@ -99,6 +111,14 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             localAdapter.onDetachedFromRecyclerView(recyclerView);
         }
         super.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    private void cleanUnstableAdapterMapping(@NonNull LocalAdapter<?> targetLocalAdapter) {
+        for (Map.Entry<Integer, LocalAdapter<?>> entry : unstableAdapterMapping.entrySet()) {
+            if (entry.getValue().equals(targetLocalAdapter)) {
+                unstableAdapterMapping.remove(entry.getKey());
+            }
+        }
     }
 
     public int positionOf(LocalAdapter<?> targetLocalAdapter) {
@@ -175,6 +195,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         checkNonNull(localAdapter);
         localAdapters.remove(localAdapter);
         localAdapterMapping.remove(localAdapter.getAdapterId());
+        cleanUnstableAdapterMapping(localAdapter);
         localAdapter.unBindParentAdapter();
         notifyDataSetChanged();
     }
@@ -185,6 +206,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
         localAdapters.clear();
         localAdapterMapping.clear();
+        unstableAdapterMapping.clear();
         notifyDataSetChanged();
     }
 }

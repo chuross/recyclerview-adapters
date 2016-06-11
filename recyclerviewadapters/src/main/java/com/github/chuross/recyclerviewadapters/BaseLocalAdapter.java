@@ -34,13 +34,16 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
     }
 
     /**
-     * LocalAdapter require one layout resource.
-     * Use CompositeRecyclerAdapter, if you want to build multiple layout adapter.
+     * @return 0 or R.layout
      */
     @Override
-    @Deprecated
-    public final int getItemViewType(int position) {
+    public int getItemViewType(int position) {
         return 0;
+    }
+
+    @Override
+    public boolean hasStableItemViewType() {
+        return getItemViewType(0) == 0;
     }
 
     @Override

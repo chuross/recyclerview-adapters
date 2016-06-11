@@ -15,6 +15,10 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
      */
     int getAdapterId();
 
+    int getItemViewType(int position);
+
+    boolean hasStableItemViewType();
+
     void onAttachedToRecyclerView(RecyclerView recyclerView);
 
     VH onCreateViewHolder(@NonNull final ViewGroup parent, int adapterId);
