@@ -18,6 +18,7 @@ import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemLongPressedListener;
 import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
 import com.github.chuross.recyclerviewadapters.ViewItem;
+import com.github.chuross.recyclerviewadapters.ViewItemAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ItemAdapter<String, RecyclerView.ViewHolder> itemAdapter1 = new ItemAdapter<String, RecyclerView.ViewHolder>(this) {
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int itemViewType) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
                 return new RecyclerView.ViewHolder(inflater.inflate(R.layout.item_adapter_1, parent, false)) {
                 };
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ItemAdapter<String, RecyclerView.ViewHolder> itemAdapter2 = new ItemAdapter<String, RecyclerView.ViewHolder>(this) {
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int itemViewType) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
                 return new RecyclerView.ViewHolder(inflater.inflate(R.layout.item_adapter_2, parent, false)) {
                 };
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         // same as itemAdapter1 layout resource
         final ItemAdapter<String, RecyclerView.ViewHolder> itemAdapter3 = new ItemAdapter<String, RecyclerView.ViewHolder>(this) {
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int itemViewType) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
                 return new RecyclerView.ViewHolder(inflater.inflate(R.layout.item_adapter_1, parent, false)) {
                 };
@@ -143,8 +144,33 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
-        ViewItem viewItem4 = new ViewItem(this, R.layout.item_footer_1);
-        ViewItem viewItem5 = new ViewItem(this, R.layout.item_footer_2);
+
+        final ViewItemAdapter viewItemAdapter = new ViewItemAdapter(this) {
+            @Override
+            public int getAdapterId() {
+                return R.id.recyclerviewadapters_itemview_adapter;
+            }
+        };
+
+        final ViewItem viewItem4 = new ViewItem(this, R.layout.item_footer_1);
+        final ViewItem viewItem5 = new ViewItem(this, R.layout.item_footer_2);
+        final ViewItem viewItem6 = new ViewItem(this, R.layout.item_append_buttom) {
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                holder.itemView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewItemAdapter.addAll(
+                                viewItem4.clone(),
+                                viewItem5.clone()
+                        );
+                    }
+                });
+            }
+        };
+
+        viewItemAdapter.add(viewItem4);
+        viewItemAdapter.add(viewItem5);
 
         /*
         compositeAdapter.addAll(
@@ -160,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
         compositeAdapter.add(itemAdapter2);
         compositeAdapter.add(viewItem3);
         compositeAdapter.add(itemAdapter3);
-        compositeAdapter.add(viewItem4);
-        compositeAdapter.add(viewItem5);
+        compositeAdapter.add(viewItemAdapter);
+        compositeAdapter.add(viewItem6);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
 
@@ -180,8 +206,9 @@ public class MainActivity extends AppCompatActivity {
                 .bind(viewItem1, SPAN_SIZE)
                 .bind(viewItem2, SPAN_SIZE)
                 .bind(viewItem3, SPAN_SIZE)
-                .bind(viewItem4, SPAN_SIZE)
-                .bind(viewItem5, SPAN_SIZE)
+                .bind(viewItem6, SPAN_SIZE)
+                .bind(viewItemAdapter, SPAN_SIZE)
+                .bind(viewItemAdapter, SPAN_SIZE)
                 .bind(itemAdapter1, 2, 1) //can set spanSize separately.
                 .build());
 

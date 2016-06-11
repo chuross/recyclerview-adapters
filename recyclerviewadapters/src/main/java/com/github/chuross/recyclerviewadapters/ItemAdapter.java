@@ -7,11 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.chuross.recyclerviewadapters.internal.EventExecutor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,8 +28,6 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public ItemAdapter(@NonNull Context context) {
         super(context);
     }
-
-    public abstract VH onCreateViewHolder(@NonNull ViewGroup parent);
 
     @Override
     public long getItemId(int position) {
@@ -110,11 +108,6 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
     }
 
     @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return onCreateViewHolder(parent);
-    }
-
-    @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
         return gestureDetector.onTouchEvent(e);
     }
@@ -137,6 +130,11 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
         return items.get(index);
     }
 
+    @NonNull
+    public List<T> getAll() {
+        return items;
+    }
+
     public void add(@NonNull T item) {
         checkNonNull(item);
         items.add(item);
@@ -147,6 +145,10 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
         checkNonNull(item);
         items.add(index, item);
         notifyItemInserted(index);
+    }
+
+    public void addAll(T... items) {
+        addAll(Arrays.asList(items));
     }
 
     public void addAll(Collection<T> items) {

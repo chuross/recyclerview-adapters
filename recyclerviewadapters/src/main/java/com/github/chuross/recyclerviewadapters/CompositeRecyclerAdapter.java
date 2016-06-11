@@ -34,7 +34,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             return localAdapter.getAdapterId();
         }
 
-        final int itemViewType = localAdapter.getItemViewType(position);
+        final int itemViewType = localAdapter.getItemViewType(item.getLocalAdapterPosition());
         unstableAdapterMapping.put(itemViewType, localAdapter);
         return itemViewType;
     }
