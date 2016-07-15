@@ -16,6 +16,7 @@ import com.github.chuross.recyclerviewadapters.ItemAdapter;
 import com.github.chuross.recyclerviewadapters.OnItemClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemLongPressedListener;
+import com.github.chuross.recyclerviewadapters.PaddingItemDecorationBuilder;
 import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
 import com.github.chuross.recyclerviewadapters.ViewItem;
 import com.github.chuross.recyclerviewadapters.ViewItemAdapter;
@@ -191,6 +192,13 @@ public class MainActivity extends AppCompatActivity {
                 .bind(itemAdapter1, 2, 1) //can set spanSize separately.
                 .bind(itemAdapter3, SPAN_SIZE)
                 .build());
+
+        /*
+         * grid padding support
+         */
+        recyclerView.addItemDecoration(new PaddingItemDecorationBuilder(compositeAdapter)
+                .register(itemAdapter2)
+                .build(getResources().getDimensionPixelSize(R.dimen.padding), SPAN_SIZE));
 
         recyclerView.setAdapter(compositeAdapter);
     }

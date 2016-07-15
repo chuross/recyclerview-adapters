@@ -20,6 +20,8 @@ public class SpanSizeLookupBuilder {
     private WeakHashMap<LocalAdapter, Pair<Integer, Integer>> spanSizeMapping = new WeakHashMap<>();
 
     public SpanSizeLookupBuilder(@NonNull Context context, @NonNull CompositeRecyclerAdapter recyclerAdapter) {
+        checkNonNull(context);
+        checkNonNull(recyclerAdapter);
         this.context = context;
         this.recyclerAdapter = recyclerAdapter;
     }
