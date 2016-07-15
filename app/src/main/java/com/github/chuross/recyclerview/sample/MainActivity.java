@@ -121,53 +121,33 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
 
         ViewItem viewItem1 = new ViewItem(this, R.layout.item_hello_world);
-        ViewItem viewItem2 = new ViewItem(this, R.layout.item_append_buttom) {
+        ViewItem viewItem2 = new ViewItem(this, R.layout.item_append_buttom, new View.OnClickListener() {
             @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-                holder.itemView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
-                        itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
-                    }
-                });
+            public void onClick(View v) {
+                itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
+                itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
             }
-        };
-        ViewItem viewItem3 = new ViewItem(this, R.layout.item_append_buttom) {
+        });
+        ViewItem viewItem3 = new ViewItem(this, R.layout.item_append_buttom, new View.OnClickListener() {
             @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-                holder.itemView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        itemAdapter2.add("itemAdapter2#" + String.valueOf(itemAdapter2.getItemCount()));
-                    }
-                });
+            public void onClick(View v) {
+                itemAdapter2.add("itemAdapter2#" + String.valueOf(itemAdapter2.getItemCount()));
             }
-        };
+        });
 
-        final ViewItemAdapter viewItemAdapter = new ViewItemAdapter(this) {
-            @Override
-            public int getAdapterId() {
-                return R.id.recyclerviewadapters_itemview_adapter;
-            }
-        };
+        final ViewItemAdapter viewItemAdapter = new ViewItemAdapter(this, R.id.recyclerviewadapters_itemview_adapter);
 
         final ViewItem viewItem4 = new ViewItem(this, R.layout.item_footer_1);
         final ViewItem viewItem5 = new ViewItem(this, R.layout.item_footer_2);
-        final ViewItem viewItem6 = new ViewItem(this, R.layout.item_append_buttom) {
+        final ViewItem viewItem6 = new ViewItem(this, R.layout.item_append_buttom, new View.OnClickListener() {
             @Override
-            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-                holder.itemView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewItemAdapter.addAll(
-                                viewItem4.clone(),
-                                viewItem5.clone()
-                        );
-                    }
-                });
+            public void onClick(View v) {
+                viewItemAdapter.addAll(
+                        viewItem4.clone(),
+                        viewItem5.clone()
+                );
             }
-        };
+        });
 
         viewItemAdapter.add(viewItem4);
         viewItemAdapter.add(viewItem5);

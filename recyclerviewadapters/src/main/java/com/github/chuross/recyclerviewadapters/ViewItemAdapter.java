@@ -5,10 +5,18 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-public abstract class ViewItemAdapter extends ItemAdapter<ViewItem, RecyclerView.ViewHolder> {
+public class ViewItemAdapter extends ItemAdapter<ViewItem, RecyclerView.ViewHolder> {
 
-    public ViewItemAdapter(@NonNull Context context) {
+    private int adapterId;
+
+    public ViewItemAdapter(@NonNull Context context, int adapterId) {
         super(context);
+        this.adapterId = adapterId;
+    }
+
+    @Override
+    public int getAdapterId() {
+        return adapterId;
     }
 
     @Override

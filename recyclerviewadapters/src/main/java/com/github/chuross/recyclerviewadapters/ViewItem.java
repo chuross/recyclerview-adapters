@@ -2,17 +2,25 @@ package com.github.chuross.recyclerviewadapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 public class ViewItem extends BaseLocalAdapter<RecyclerView.ViewHolder> implements Cloneable {
 
     private int layoutResourceId;
+    private View.OnClickListener clickListener;
 
-    public ViewItem(@NonNull Context context, int layoutResourceId) {
+    public ViewItem(@NonNull Context context, @NonNull int layoutResourceId) {
+        this(context, layoutResourceId, null);
+    }
+
+    public ViewItem(@NonNull Context context, @NonNull int layoutResourceId, @Nullable View.OnClickListener clickListener) {
         super(context);
         this.layoutResourceId = layoutResourceId;
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -29,6 +37,12 @@ public class ViewItem extends BaseLocalAdapter<RecyclerView.ViewHolder> implemen
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickListener != null) clickListener.onClick(v);
+            }
+        });
     }
 
     @Override
@@ -38,6 +52,6 @@ public class ViewItem extends BaseLocalAdapter<RecyclerView.ViewHolder> implemen
 
     @Override
     public ViewItem clone() {
-        return new ViewItem(getContext(), layoutResourceId);
+        return new ViewItem(getContext(), layoutResourceId, clickListener);
     }
 }
