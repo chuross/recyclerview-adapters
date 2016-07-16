@@ -1,6 +1,5 @@
 package com.github.chuross.recyclerviewadapters;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -21,17 +20,17 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
 
     void onAttachedToRecyclerView(RecyclerView recyclerView);
 
-    VH onCreateViewHolder(@NonNull final ViewGroup parent, int adapterId);
+    VH onCreateViewHolder(final ViewGroup parent, int adapterId);
 
-    void onViewRecycled(RecyclerView.ViewHolder holder);
+    void onViewRecycled(VH holder);
 
-    boolean onFailedToRecycleView(RecyclerView.ViewHolder holder);
+    boolean onFailedToRecycleView(VH holder);
 
-    void onViewAttachedToWindow(RecyclerView.ViewHolder holder);
+    void onViewAttachedToWindow(VH holder);
 
-    void onBindViewHolder(@NonNull final VH holder, final int position);
+    void onBindViewHolder(final VH holder, final int position);
 
-    void onViewDetachedFromWindow(RecyclerView.ViewHolder holder);
+    void onViewDetachedFromWindow(VH holder);
 
     void onDetachedFromRecyclerView(RecyclerView recyclerView);
 
