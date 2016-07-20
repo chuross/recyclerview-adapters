@@ -93,7 +93,7 @@ public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends
             return;
         }
         LocalAdapterItem localAdapterItem = getParentAdapter().getLocalAdapterItem(parentAdapterPosition);
-        if (localAdapterItem == null || localAdapterItem.getLocalAdapter() != ItemAdapter.this) {
+        if (localAdapterItem == null || localAdapterItem.getLocalAdapter() != this) {
             return;
         }
 

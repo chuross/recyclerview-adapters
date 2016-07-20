@@ -21,6 +21,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     private List<LocalAdapter<?>> localAdapters = new ArrayList<>();
     private Map<Integer, LocalAdapter<?>> localAdapterMapping = new HashMap<>();
     private Map<Integer, LocalAdapter<?>> unstableAdapterMapping = new HashMap<>();
+    private RecyclerView recyclerView;
 
     @Override
     public final int getItemViewType(final int position) {
@@ -42,6 +43,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
         for (LocalAdapter<?> localAdapter : localAdapters) {
             localAdapter.onAttachedToRecyclerView(recyclerView);
         }
@@ -111,6 +113,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             localAdapter.onDetachedFromRecyclerView(recyclerView);
         }
         super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
     }
 
     private void cleanUnstableAdapterMapping(@NonNull LocalAdapter<?> targetLocalAdapter) {
@@ -119,6 +122,10 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 unstableAdapterMapping.remove(entry.getKey());
             }
         }
+    }
+
+    public RecyclerView getAttachedRecyclerView() {
+        return recyclerView;
     }
 
     public int positionOf(LocalAdapter<?> targetLocalAdapter) {
@@ -174,6 +181,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         localAdapters.add(index, localAdapter);
         localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
         localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
+        if (recyclerView != null) localAdapter.onAttachedToRecyclerView(recyclerView);
         notifyDataSetChanged();
     }
 
@@ -187,6 +195,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         for (LocalAdapter localAdapter : localAdapters) {
             localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
             localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
+            if (recyclerView != null) localAdapter.onAttachedToRecyclerView(recyclerView);
         }
         notifyDataSetChanged();
     }
@@ -197,12 +206,14 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         localAdapterMapping.remove(localAdapter.getAdapterId());
         cleanUnstableAdapterMapping(localAdapter);
         localAdapter.unBindParentAdapter();
+        if (recyclerView != null) localAdapter.onDetachedFromRecyclerView(recyclerView);
         notifyDataSetChanged();
     }
 
     public void clear() {
         for (LocalAdapter<?> localAdapter : localAdapters) {
             localAdapter.unBindParentAdapter();
+            if (recyclerView != null) localAdapter.onDetachedFromRecyclerView(recyclerView);
         }
         localAdapters.clear();
         localAdapterMapping.clear();
