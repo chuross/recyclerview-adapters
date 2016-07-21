@@ -16,7 +16,7 @@ import com.github.chuross.recyclerviewadapters.ItemAdapter;
 import com.github.chuross.recyclerviewadapters.OnItemClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemLongPressedListener;
-import com.github.chuross.recyclerviewadapters.PaddingItemDecorationBuilder;
+import com.github.chuross.recyclerviewadapters.GridPaddingItemDecorationBuilder;
 import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
 import com.github.chuross.recyclerviewadapters.ViewItem;
 import com.github.chuross.recyclerviewadapters.ViewItemAdapter;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 return R.layout.item_adapter_1;
             }
         };
-        itemAdapter1.add("itemAdapter1#default");
+        itemAdapter1.add("itemAdapter1#0");
         itemAdapter1.setOnItemClickListener(new OnItemClickListener<String>() {
             @Override
             public void onItemClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 return R.layout.item_adapter_2;
             }
         };
-        itemAdapter2.add("itemAdapter2#default");
+        itemAdapter2.add("itemAdapter2#0");
         itemAdapter2.setOnItemClickListener(new OnItemClickListener<String>() {
             @Override
             public void onItemClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
@@ -196,9 +196,10 @@ public class MainActivity extends AppCompatActivity {
         /*
          * grid padding support
          */
-        recyclerView.addItemDecoration(new PaddingItemDecorationBuilder(compositeAdapter)
-                .register(itemAdapter2)
-                .build(getResources().getDimensionPixelSize(R.dimen.padding), SPAN_SIZE));
+        int padding = getResources().getDimensionPixelSize(R.dimen.padding);
+        recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(padding, SPAN_SIZE)
+                .put(itemAdapter1)
+                .build(compositeAdapter));
 
         recyclerView.setAdapter(compositeAdapter);
     }
