@@ -169,30 +169,31 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public void add(@NonNull LocalAdapter<?> localAdapter) {
-        checkNonNull(localAdapter);
-        localAdapters.add(localAdapter);
-        localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
-        localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
-        if (recyclerView != null) localAdapter.onAttachedToRecyclerView(recyclerView);
-        notifyDataSetChanged();
+        addAll(localAdapter);
     }
 
     public void add(int index, @NonNull LocalAdapter<?> localAdapter) {
-        checkNonNull(localAdapter);
-        localAdapters.add(index, localAdapter);
-        localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
-        localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
-        if (recyclerView != null) localAdapter.onAttachedToRecyclerView(recyclerView);
-        notifyDataSetChanged();
-    }
-
-    public void addAll(@NonNull LocalAdapter<?>... localAdapters) {
-        addAll(Arrays.asList(localAdapters));
+        addAll(index, localAdapter);
     }
 
     public void addAll(@NonNull Collection<LocalAdapter<?>> localAdapters) {
         checkNonNull(localAdapters);
-        this.localAdapters.addAll(localAdapters);
+    }
+
+    public void addAll(@NonNull LocalAdapter<?>... localAdapters) {
+        checkNonNull(localAdapters);
+        addAll(this.localAdapters.size(), localAdapters);
+    }
+
+    public void addAll(int index, @NonNull LocalAdapter<?>... localAdapters) {
+        checkNonNull(localAdapters);
+
+        if (localAdapters.length > 1) {
+            this.localAdapters.addAll(index, Arrays.asList(localAdapters));
+        } else {
+            this.localAdapters.add(index, localAdapters[0]);
+        }
+
         for (LocalAdapter localAdapter : localAdapters) {
             localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
             localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));

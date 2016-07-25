@@ -9,7 +9,7 @@ public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
     int getItemCount();
 
     /**
-     * static identity
+     * static identity for CompositeRecyclerAdapter#onCreateViewHolder
      * ex) R.layout, R.id
      */
     int getAdapterId();
