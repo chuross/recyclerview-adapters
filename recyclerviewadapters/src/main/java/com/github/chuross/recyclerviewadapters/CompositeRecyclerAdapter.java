@@ -173,6 +173,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         localAdapters.add(localAdapter);
         localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
         localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
+        if (recyclerView != null) localAdapter.onAttachedToRecyclerView(recyclerView);
         notifyDataSetChanged();
     }
 
