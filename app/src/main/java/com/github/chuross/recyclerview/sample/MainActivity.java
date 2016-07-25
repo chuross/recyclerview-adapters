@@ -113,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) holder.itemView.findViewById(R.id.text)).setText(get(position));
             }
 
-            // Replace adapterId, if you want to same layout ItemAdapter.
+            // Don't worry! This ItemAdapter will be used recycled 'R.layout.item_adapter_1' ViewHolder, if you want to use same AdapterId.
             @Override
             public int getAdapterId() {
-                return R.id.extra_item_adapter;
+                return R.layout.item_adapter_1;
             }
         };
         itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
