@@ -15,19 +15,27 @@ import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersU
  */
 public class GridPaddingItemDecorationBuilder {
 
-    private WeakHashMap<LocalAdapter, Boolean> paddingMap = new WeakHashMap<>();
+    private CompositeRecyclerAdapter recyclerAdapter;
+    private WeakHashMap<Object, Boolean> paddingMap = new WeakHashMap<>();
     private int padding;
     private int maxSpanSize;
     private PaddingType paddingType;
 
-    public GridPaddingItemDecorationBuilder(int padding, int maxSpanSize) {
-        this(padding, maxSpanSize, PaddingType.BOTH);
+    public GridPaddingItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize) {
+        this(recyclerAdapter, padding, maxSpanSize, PaddingType.BOTH);
     }
 
-    public GridPaddingItemDecorationBuilder(int padding, int maxSpanSize, PaddingType paddingType) {
+    public GridPaddingItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize, PaddingType paddingType) {
+        this.recyclerAdapter = recyclerAdapter;
         this.padding = padding;
         this.maxSpanSize = maxSpanSize;
         this.paddingType = paddingType;
+    }
+
+    public <CLASS extends Class<? extends LocalAdapter>> GridPaddingItemDecorationBuilder put(@NonNull CLASS adapterClass) {
+        checkNonNull(adapterClass);
+        paddingMap.put(adapterClass, true);
+        return this;
     }
 
     public GridPaddingItemDecorationBuilder put(@NonNull LocalAdapter localAdapter) {
@@ -36,8 +44,7 @@ public class GridPaddingItemDecorationBuilder {
         return this;
     }
 
-    public RecyclerView.ItemDecoration build(@NonNull CompositeRecyclerAdapter recyclerAdapter) {
-        checkNonNull(recyclerAdapter);
+    public RecyclerView.ItemDecoration build() {
         return new GridPaddingItemDecoration(recyclerAdapter, padding, maxSpanSize, paddingMap, paddingType);
     }
 
@@ -48,12 +55,12 @@ public class GridPaddingItemDecorationBuilder {
     public static class GridPaddingItemDecoration extends RecyclerView.ItemDecoration {
 
         private CompositeRecyclerAdapter recyclerAdapter;
-        private WeakHashMap<LocalAdapter, Boolean> paddingMap;
+        private WeakHashMap<Object, Boolean> paddingMap;
         private int padding;
         private int maxSpanSize;
         private PaddingType paddingType;
 
-        private GridPaddingItemDecoration(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize, WeakHashMap<LocalAdapter, Boolean> paddingMap, PaddingType paddingType) {
+        private GridPaddingItemDecoration(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize, WeakHashMap<Object, Boolean> paddingMap, PaddingType paddingType) {
             this.recyclerAdapter = recyclerAdapter;
             this.padding = padding;
             this.maxSpanSize = maxSpanSize;
@@ -87,7 +94,9 @@ public class GridPaddingItemDecorationBuilder {
 
         private boolean usePadding(int position) {
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(position);
-            return item != null && paddingMap.containsKey(item.getLocalAdapter());
+            if (item == null) return false;
+
+            return paddingMap.containsKey(item.getLocalAdapter()) || paddingMap.containsKey(item.getLocalAdapter().getClass());
         }
 
         private int getPaddingLeft(int index, int spanSize) {

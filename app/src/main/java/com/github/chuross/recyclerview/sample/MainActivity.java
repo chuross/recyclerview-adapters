@@ -1,7 +1,9 @@
 package com.github.chuross.recyclerview.sample;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -122,14 +124,14 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
 
         ViewItem viewItem1 = new ViewItem(this, R.layout.item_hello_world);
-        ViewItem viewItem2 = new ViewItem(this, R.layout.item_append_buttom, new View.OnClickListener() {
+        ViewItem viewItem2 = new AppendButtonViewItem(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
                 itemAdapter1.add("itemAdapter1#" + String.valueOf(itemAdapter1.getItemCount()));
             }
         });
-        ViewItem viewItem3 = new ViewItem(this, R.layout.item_append_buttom, new View.OnClickListener() {
+        ViewItem viewItem3 = new AppendButtonViewItem(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemAdapter2.add("itemAdapter2#" + String.valueOf(itemAdapter2.getItemCount()));
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ViewItem viewItem4 = new ViewItem(this, R.layout.item_footer_1);
         final ViewItem viewItem5 = new ViewItem(this, R.layout.item_footer_2);
-        final ViewItem viewItem6 = new ViewItem(this, R.layout.item_append_buttom, new View.OnClickListener() {
+        final ViewItem viewItem6 = new ViewItem(this, R.layout.item_append_button, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewItemAdapter.addAll(
@@ -185,8 +187,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
         gridLayoutManager.setSpanSizeLookup(new SpanSizeLookupBuilder(this, compositeAdapter)
                 .bind(viewItem1, SPAN_SIZE)
-                .bind(viewItem2, SPAN_SIZE)
-                .bind(viewItem3, SPAN_SIZE)
+                .bind(AppendButtonViewItem.class, SPAN_SIZE)
                 .bind(viewItem6, SPAN_SIZE)
                 .bind(viewItemAdapter, SPAN_SIZE)
                 .bind(itemAdapter1, 2, 1) //can set spanSize separately.
@@ -197,10 +198,22 @@ public class MainActivity extends AppCompatActivity {
          * grid padding support
          */
         int padding = getResources().getDimensionPixelSize(R.dimen.padding);
-        recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(padding, SPAN_SIZE)
+        recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAdapter, padding, SPAN_SIZE)
                 .put(itemAdapter1)
-                .build(compositeAdapter));
+                .put(AppendButtonViewItem.class)
+                .build());
 
         recyclerView.setAdapter(compositeAdapter);
+    }
+
+    private static class AppendButtonViewItem extends ViewItem {
+
+        public AppendButtonViewItem(@NonNull Context context) {
+            super(context, R.layout.item_append_button);
+        }
+
+        public AppendButtonViewItem(@NonNull Context context, @Nullable View.OnClickListener clickListener) {
+            super(context, R.layout.item_append_button, clickListener);
+        }
     }
 }
