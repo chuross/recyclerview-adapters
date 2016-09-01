@@ -125,7 +125,13 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
         itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
 
-        ViewItem viewItem1 = new ViewItem(this, R.layout.item_hello_world);
+        final ViewItem viewItem1 = new ViewItem(this, R.layout.item_hello_world);
+        ViewItem visibleChangeButton = new ViewItem(this, R.layout.visible_toggle, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewItem1.setVisible(!viewItem1.isVisible());
+            }
+        });
         ViewItem viewItem2 = new AppendButtonViewItem(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         );
          */
         compositeAdapter.add(viewItem1);
+        compositeAdapter.add(visibleChangeButton);
         compositeAdapter.add(itemAdapter1);
         compositeAdapter.add(viewItem2);
         compositeAdapter.add(itemAdapter2);
@@ -189,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
         gridLayoutManager.setSpanSizeLookup(new SpanSizeLookupBuilder(this, compositeAdapter)
                 .bind(viewItem1, SPAN_SIZE)
+                .bind(visibleChangeButton, SPAN_SIZE)
                 .bind(AppendButtonViewItem.class, SPAN_SIZE)
                 .bind(viewItem6, SPAN_SIZE)
                 .bind(viewItemAdapter, SPAN_SIZE)
@@ -201,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
          */
         int padding = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAdapter, padding, SPAN_SIZE)
+                .put(visibleChangeButton)
                 .put(itemAdapter1)
                 .put(AppendButtonViewItem.class)
                 .build());
@@ -215,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
                 .put(AppendButtonViewItem.class)
                 .build());
         recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter, dividerHeight, Color.BLUE)
+                .put(visibleChangeButton)
                 .put(itemAdapter3)
                 .build());
 

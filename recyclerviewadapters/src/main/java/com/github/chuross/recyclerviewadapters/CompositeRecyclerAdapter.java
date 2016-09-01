@@ -131,6 +131,8 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public int positionOf(LocalAdapter<?> targetLocalAdapter) {
         int offset = 0;
         for (LocalAdapter<?> localAdapter : localAdapters) {
+            if (!localAdapter.isVisible()) continue;
+
             if (localAdapter.equals(targetLocalAdapter)) return offset;
 
             offset += localAdapter.getItemCount();
@@ -146,6 +148,8 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     private int getTotalCount() {
         int size = 0;
         for (LocalAdapter localAdapter : localAdapters) {
+            if (!localAdapter.isVisible()) continue;
+
             size += localAdapter.getItemCount();
         }
         return size;
@@ -159,6 +163,8 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public LocalAdapterItem getLocalAdapterItem(final int position) {
         int offset = 0;
         for (LocalAdapter localAdapter : localAdapters) {
+            if (!localAdapter.isVisible()) continue;
+
             if (position < (offset + localAdapter.getItemCount())) {
                 int localAdapterPosition = position - offset;
                 return new LocalAdapterItem(localAdapterPosition, localAdapter);

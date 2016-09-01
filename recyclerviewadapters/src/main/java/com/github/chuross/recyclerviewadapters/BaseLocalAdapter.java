@@ -11,9 +11,19 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
 
     private Context context;
     private WeakReference<CompositeRecyclerAdapter> parentAdapter;
+    private boolean visible = true;
 
     public BaseLocalAdapter(@NonNull Context context) {
         this.context = context;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+        notifyDataSetChanged();
     }
 
     @Override

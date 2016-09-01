@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
 
+    boolean isVisible();
+
     int getItemCount();
 
     /**
