@@ -1,6 +1,7 @@
 package com.github.chuross.recyclerview.sample;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
+import com.github.chuross.recyclerviewadapters.DividerItemDecorationBuilder;
 import com.github.chuross.recyclerviewadapters.ItemAdapter;
 import com.github.chuross.recyclerviewadapters.OnItemClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
@@ -201,6 +203,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAdapter, padding, SPAN_SIZE)
                 .put(itemAdapter1)
                 .put(AppendButtonViewItem.class)
+                .build());
+
+        /*
+         * divider decoration support
+         */
+        int dividerHeight = getResources().getDimensionPixelSize(R.dimen.divider_height);
+
+        recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter, dividerHeight, Color.BLACK)
+                .put(itemAdapter1)
+                .put(AppendButtonViewItem.class)
+                .build());
+        recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter, dividerHeight, Color.BLUE)
+                .put(itemAdapter3)
                 .build());
 
         recyclerView.setAdapter(compositeAdapter);
