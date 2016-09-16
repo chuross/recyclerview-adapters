@@ -48,7 +48,7 @@ public class SpanSizeLookupBuilder {
         return this;
     }
 
-    public GridLayoutManager.SpanSizeLookup build() {
+    public GridSpanSizeLookup build() {
         return new GridSpanSizeLookup(context, recyclerAdapter, spanSizeMapping);
     }
 

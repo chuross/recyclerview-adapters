@@ -49,7 +49,7 @@ public class GridPaddingItemDecorationBuilder {
         return this;
     }
 
-    public RecyclerView.ItemDecoration build() {
+    public GridPaddingItemDecoration build() {
         return new GridPaddingItemDecoration(recyclerAdapter, padding, maxSpanSize, paddingMap, paddingType);
     }
 
