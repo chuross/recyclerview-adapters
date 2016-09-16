@@ -44,6 +44,11 @@ public class GridPaddingItemDecorationBuilder {
         return this;
     }
 
+    public GridPaddingItemDecorationBuilder setMaxSpanSize(int maxSpanSize) {
+        this.maxSpanSize = maxSpanSize;
+        return this;
+    }
+
     public RecyclerView.ItemDecoration build() {
         return new GridPaddingItemDecoration(recyclerAdapter, padding, maxSpanSize, paddingMap, paddingType);
     }
@@ -65,6 +70,14 @@ public class GridPaddingItemDecorationBuilder {
             this.padding = padding;
             this.maxSpanSize = maxSpanSize;
             this.paddingMap = paddingMap;
+            this.paddingType = paddingType;
+        }
+
+        public void setMaxSpanSize(int maxSpanSize) {
+            this.maxSpanSize = maxSpanSize;
+        }
+
+        public void setPaddingType(PaddingType paddingType) {
             this.paddingType = paddingType;
         }
 
