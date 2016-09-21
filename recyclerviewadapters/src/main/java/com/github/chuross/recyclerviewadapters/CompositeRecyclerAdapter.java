@@ -195,6 +195,8 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public void addAll(int index, @NonNull LocalAdapter<?>... localAdapters) {
         checkNonNull(localAdapters);
 
+        if (localAdapters.length == 0) return;
+
         if (localAdapters.length > 1) {
             this.localAdapters.addAll(index, Arrays.asList(localAdapters));
         } else {
