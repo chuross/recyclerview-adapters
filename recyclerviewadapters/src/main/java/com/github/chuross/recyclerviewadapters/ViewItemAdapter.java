@@ -18,6 +18,11 @@ public class ViewItemAdapter extends ItemAdapter<ViewItem, RecyclerView.ViewHold
     }
 
     @Override
+    public boolean hasStableItemViewType() {
+        return false;
+    }
+
+    @Override
     public int getItemViewType(int position) {
         return get(position).getAdapterId();
     }
