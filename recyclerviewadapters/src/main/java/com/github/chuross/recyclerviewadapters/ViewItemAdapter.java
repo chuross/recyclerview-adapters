@@ -7,16 +7,14 @@ import android.view.ViewGroup;
 
 public class ViewItemAdapter extends ItemAdapter<ViewItem, RecyclerView.ViewHolder> {
 
-    private int adapterId;
 
-    public ViewItemAdapter(@NonNull Context context, int adapterId) {
+    public ViewItemAdapter(@NonNull Context context) {
         super(context);
-        this.adapterId = adapterId;
     }
 
     @Override
     public int getAdapterId() {
-        return adapterId;
+        return 0;
     }
 
     @Override

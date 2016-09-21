@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final ViewItemAdapter viewItemAdapter = new ViewItemAdapter(this, R.id.recyclerviewadapters_itemview_adapter);
+        final ViewItemAdapter viewItemAdapter = new ViewItemAdapter(this);
 
         final ViewItem viewItem4 = new ViewItem(this, R.layout.item_footer_1);
         final ViewItem viewItem5 = new ViewItem(this, R.layout.item_footer_2);

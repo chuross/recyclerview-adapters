@@ -204,7 +204,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         for (LocalAdapter localAdapter : localAdapters) {
-            localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
+            if (localAdapter.hasStableItemViewType()) localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
             localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
             if (recyclerView != null) localAdapter.onAttachedToRecyclerView(recyclerView);
         }
