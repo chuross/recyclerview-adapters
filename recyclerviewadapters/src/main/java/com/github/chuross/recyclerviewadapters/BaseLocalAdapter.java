@@ -53,7 +53,11 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
 
     @Override
     public boolean hasStableItemViewType() {
-        return getItemViewType(0) == 0;
+        try {
+            return getItemViewType(0) == 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
