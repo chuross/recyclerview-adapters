@@ -4,7 +4,7 @@
 Easy way to build `RecyclerView.Adapter`.
 This adapter also has multiple ItemViewType, if needed.
 
-![sample](https://qiita-image-store.s3.amazonaws.com/0/20629/1f78ff2a-a1d4-e231-629d-14ac01bf2fda.gif)
+![sample](https://cloud.githubusercontent.com/assets/1422031/24061304/42627b7e-0b9a-11e7-97d1-14a6cabcfd59.gif)
 
 ## Download
 ### Gradle
@@ -32,5 +32,3 @@ dependencies {
     compile 'com.github.chuross.recyclerview-adapters:recyclerview-adapters-rx:1.x.x'
 }
 ```
-
-
