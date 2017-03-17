@@ -1,1 +1,1 @@
-include ':app', ':recyclerview-adapters'
+include ':app', ':recyclerview-adapters', ':recyclerview-adapters-rx'

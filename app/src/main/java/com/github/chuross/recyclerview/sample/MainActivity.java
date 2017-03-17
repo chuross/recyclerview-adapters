@@ -16,14 +16,21 @@ import android.widget.Toast;
 
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
 import com.github.chuross.recyclerviewadapters.DividerItemDecorationBuilder;
+import com.github.chuross.recyclerviewadapters.GridPaddingItemDecorationBuilder;
 import com.github.chuross.recyclerviewadapters.ItemAdapter;
 import com.github.chuross.recyclerviewadapters.OnItemClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemLongPressedListener;
-import com.github.chuross.recyclerviewadapters.GridPaddingItemDecorationBuilder;
 import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
 import com.github.chuross.recyclerviewadapters.ViewItem;
 import com.github.chuross.recyclerviewadapters.ViewItemAdapter;
+import com.github.chuross.rx.RxItemAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import io.reactivex.processors.BehaviorProcessor;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -75,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final ItemAdapter<String, RecyclerView.ViewHolder> itemAdapter2 = new ItemAdapter<String, RecyclerView.ViewHolder>(this) {
+        final BehaviorProcessor<List<String>> itemAdapter2Items = BehaviorProcessor.<List<String>>createDefault(new ArrayList<>(Arrays.asList("itemAdapter2#0")));
+        final RxItemAdapter<String, RecyclerView.ViewHolder> itemAdapter2 = new RxItemAdapter<String, RecyclerView.ViewHolder>(this, itemAdapter2Items) {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int itemViewType) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -93,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 return R.layout.item_adapter_2;
             }
         };
-        itemAdapter2.add("itemAdapter2#0");
         itemAdapter2.setOnItemClickListener(new OnItemClickListener<String>() {
             @Override
             public void onItemClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
@@ -142,7 +149,9 @@ public class MainActivity extends AppCompatActivity {
         ViewItem viewItem3 = new AppendButtonViewItem(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemAdapter2.add("itemAdapter2#" + String.valueOf(itemAdapter2.getItemCount()));
+                final String value = "RxItemAdapter2#" + String.valueOf(itemAdapter2.getItemCount());
+                itemAdapter2Items.getValue().add(value);
+                itemAdapter2Items.onNext(itemAdapter2Items.getValue());
             }
         });
 

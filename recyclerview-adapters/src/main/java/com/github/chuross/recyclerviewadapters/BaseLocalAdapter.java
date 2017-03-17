@@ -12,6 +12,7 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
     private Context context;
     private WeakReference<CompositeRecyclerAdapter> parentAdapter;
     private boolean visible = true;
+    private boolean isAttached = false;
 
     public BaseLocalAdapter(@NonNull Context context) {
         this.context = context;
@@ -19,6 +20,10 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
 
     public boolean isVisible() {
         return visible;
+    }
+
+    public boolean isAttached() {
+        return isAttached;
     }
 
     public void setVisible(boolean visible) {
@@ -36,11 +41,15 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
     }
 
     @Override
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        isAttached = true;
     }
 
     @Override
-    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        isAttached = false;
+        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     /**

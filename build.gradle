@@ -1,7 +1,8 @@
 
 ext {
     versions = [
-        supportLib: '25.1.0'
+        supportLib: '25.1.0',
+        rx: '2.0.1'
     ]
 }
 
