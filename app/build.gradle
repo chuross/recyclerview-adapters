@@ -22,7 +22,7 @@ android {
 def v = rootProject.ext.versions
 
 dependencies {
-    compile project(':recyclerviewadapters')
+    compile project(':recyclerview-adapters')
     compile "com.android.support:appcompat-v7:$v.supportLib"
     testCompile 'junit:junit:4.12'
 }
