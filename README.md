@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/chuross/recyclerview-adapters.svg)](https://jitpack.io/#chuross/recyclerview-adapters)
+[![](https://jitpack.io/v/chuross/recyclerview-adapters.svg)](https://jitpack.io/#chuross/recyclerview-adapters)　[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-recyclerview--adapters-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5666)
 
 # RecyclerViewAdapters
 Easy way to build `RecyclerView.Adapter`.
