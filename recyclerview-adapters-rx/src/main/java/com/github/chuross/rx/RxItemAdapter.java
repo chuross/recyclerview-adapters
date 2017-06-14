@@ -19,6 +19,7 @@ public abstract class RxItemAdapter<I, VH extends RecyclerView.ViewHolder> exten
 
     private Disposable disposable;
     private Flowable<List<I>> flowable;
+    private OnItemDataChangedListener itemDataChangedListener;
     private List<I> cachedItems = Collections.emptyList();
 
     public RxItemAdapter(@NonNull Context context, @NonNull Flowable<List<I>> flowable) {
@@ -39,6 +40,7 @@ public abstract class RxItemAdapter<I, VH extends RecyclerView.ViewHolder> exten
             public void accept(List<I> is) throws Exception {
                 cachedItems = is;
                 notifyDataSetChanged();
+                if (itemDataChangedListener != null) itemDataChangedListener.onDataChanged();
             }
         });
     }
@@ -58,5 +60,9 @@ public abstract class RxItemAdapter<I, VH extends RecyclerView.ViewHolder> exten
     @Override
     public I get(int position) {
         return cachedItems.get(position);
+    }
+
+    public void setOnDataSetChangedListener(OnItemDataChangedListener listener) {
+        itemDataChangedListener = listener;
     }
 }
