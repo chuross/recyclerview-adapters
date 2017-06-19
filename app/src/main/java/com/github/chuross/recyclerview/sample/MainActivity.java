@@ -203,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
         int padding = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAdapter, padding, SPAN_SIZE)
                 .paddingType(GridPaddingItemDecorationBuilder.PaddingType.BOTH)
-                .put(visibleChangeButton)
-                .put(itemAdapter2)
-                .put(AppendButtonViewItem.class)
+                .register(visibleChangeButton)
+                .register(itemAdapter2)
+                .register(AppendButtonViewItem.class)
                 .build());
 
         /*

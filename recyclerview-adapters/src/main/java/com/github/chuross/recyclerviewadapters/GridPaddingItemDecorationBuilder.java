@@ -21,15 +21,6 @@ public class GridPaddingItemDecorationBuilder {
     private int maxSpanSize;
     private PaddingType paddingType;
 
-    public static GridPaddingItemDecorationBuilder from(RecyclerView recyclerView) {
-        if (!(recyclerView.getAdapter() instanceof CompositeRecyclerAdapter
-            || !(recyclerView.getLayoutManager() instanceof GridLayoutManager))) throw new IllegalStateException("RecyclerView must be set CompositeAdapter and GridLayoutManager.");
-
-        CompositeRecyclerAdapter adapter = (CompositeRecyclerAdapter) recyclerView.getAdapter();
-        GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-        return new GridPaddingItemDecorationBuilder(adapter, Math.round(recyclerView.getPaddingLeft() / 2), gridLayoutManager.getSpanCount());
-    }
-
     public GridPaddingItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize) {
         this.recyclerAdapter = recyclerAdapter;
         this.padding = padding;
@@ -41,20 +32,15 @@ public class GridPaddingItemDecorationBuilder {
         return this;
     }
 
-    public <CLASS extends Class<? extends LocalAdapter>> GridPaddingItemDecorationBuilder put(@NonNull CLASS adapterClass) {
+    public <CLASS extends Class<? extends LocalAdapter>> GridPaddingItemDecorationBuilder register(@NonNull CLASS adapterClass) {
         checkNonNull(adapterClass);
         paddingMap.put(adapterClass, true);
         return this;
     }
 
-    public GridPaddingItemDecorationBuilder put(@NonNull LocalAdapter localAdapter) {
+    public GridPaddingItemDecorationBuilder register(@NonNull LocalAdapter localAdapter) {
         checkNonNull(localAdapter);
         paddingMap.put(localAdapter, true);
-        return this;
-    }
-
-    public GridPaddingItemDecorationBuilder setMaxSpanSize(int maxSpanSize) {
-        this.maxSpanSize = maxSpanSize;
         return this;
     }
 
