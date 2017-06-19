@@ -212,13 +212,17 @@ public class MainActivity extends AppCompatActivity {
          */
         int dividerHeight = getResources().getDimensionPixelSize(R.dimen.divider_height);
 
-        recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter, dividerHeight, Color.BLACK)
-                .put(itemAdapter1)
-                .put(AppendButtonViewItem.class)
+        recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter)
+                .dividerHeight(dividerHeight)
+                .dividerColor(Color.BLACK)
+                .register(itemAdapter1)
+                .register(AppendButtonViewItem.class)
                 .build());
-        recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter, dividerHeight, Color.BLUE)
-                .put(visibleChangeButton)
-                .put(itemAdapter3)
+        recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter)
+                .dividerHeight(dividerHeight)
+                .dividerColor(Color.BLUE)
+                .register(visibleChangeButton)
+                .register(itemAdapter3)
                 .build());
 
         /*
@@ -233,10 +237,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static class AppendButtonViewItem extends ViewItem {
-
-        public AppendButtonViewItem(@NonNull Context context) {
-            super(context, R.layout.item_append_button);
-        }
 
         public AppendButtonViewItem(@NonNull Context context, @Nullable View.OnClickListener clickListener) {
             super(context, R.layout.item_append_button, clickListener);

@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,22 +21,30 @@ public class DividerItemDecorationBuilder {
     private int dividerHeight = 0;
     private int dividerColor = Color.BLACK;
 
-    public DividerItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int dividerHeight, int dividerColor) {
+    public DividerItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter) {
         checkNonNull(recyclerAdapter);
         this.recyclerAdapter = recyclerAdapter;
-        this.dividerHeight = dividerHeight;
-        this.dividerColor = dividerColor;
     }
 
-    public <CLASS extends Class<? extends LocalAdapter>> DividerItemDecorationBuilder put(@NonNull CLASS adapterClass) {
+    public <CLASS extends Class<? extends LocalAdapter>> DividerItemDecorationBuilder register(@NonNull CLASS adapterClass) {
         checkNonNull(adapterClass);
         decorationMap.put(adapterClass, true);
         return this;
     }
 
-    public DividerItemDecorationBuilder put(@NonNull LocalAdapter localAdapter) {
+    public DividerItemDecorationBuilder register(@NonNull LocalAdapter localAdapter) {
         checkNonNull(localAdapter);
         decorationMap.put(localAdapter, true);
+        return this;
+    }
+
+    public DividerItemDecorationBuilder dividerHeight(int dividerHeight) {
+        this.dividerHeight = dividerHeight;
+        return this;
+    }
+
+    public DividerItemDecorationBuilder dividerColor(@ColorInt int dividerColor) {
+        this.dividerColor = dividerColor;
         return this;
     }
 
@@ -59,7 +69,7 @@ public class DividerItemDecorationBuilder {
         int dividerHeight;
         Paint dividerPaint;
 
-        DividerItemDecoration() {
+        private DividerItemDecoration() {
         }
 
         @Override
