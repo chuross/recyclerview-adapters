@@ -21,15 +21,24 @@ public class GridPaddingItemDecorationBuilder {
     private int maxSpanSize;
     private PaddingType paddingType;
 
-    public GridPaddingItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize) {
-        this(recyclerAdapter, padding, maxSpanSize, PaddingType.BOTH);
+    public static GridPaddingItemDecorationBuilder from(RecyclerView recyclerView) {
+        if (!(recyclerView.getAdapter() instanceof CompositeRecyclerAdapter
+            || !(recyclerView.getLayoutManager() instanceof GridLayoutManager))) throw new IllegalStateException("RecyclerView must be set CompositeAdapter and GridLayoutManager.");
+
+        CompositeRecyclerAdapter adapter = (CompositeRecyclerAdapter) recyclerView.getAdapter();
+        GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+        return new GridPaddingItemDecorationBuilder(adapter, Math.round(recyclerView.getPaddingLeft() / 2), gridLayoutManager.getSpanCount());
     }
 
-    public GridPaddingItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize, PaddingType paddingType) {
+    public GridPaddingItemDecorationBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize) {
         this.recyclerAdapter = recyclerAdapter;
         this.padding = padding;
         this.maxSpanSize = maxSpanSize;
+    }
+
+    public GridPaddingItemDecorationBuilder paddingType(PaddingType paddingType) {
         this.paddingType = paddingType;
+        return this;
     }
 
     public <CLASS extends Class<? extends LocalAdapter>> GridPaddingItemDecorationBuilder put(@NonNull CLASS adapterClass) {
@@ -50,7 +59,12 @@ public class GridPaddingItemDecorationBuilder {
     }
 
     public GridPaddingItemDecoration build() {
-        return new GridPaddingItemDecoration(recyclerAdapter, padding, maxSpanSize, paddingMap, paddingType);
+        GridPaddingItemDecoration itemDecoration = new GridPaddingItemDecoration(recyclerAdapter);
+        itemDecoration.padding = padding;
+        itemDecoration.maxSpanSize = maxSpanSize;
+        itemDecoration.paddingMap = paddingMap;
+        itemDecoration.paddingType = paddingType != null ? paddingType : PaddingType.BOTH;
+        return itemDecoration;
     }
 
     public enum PaddingType {
@@ -59,26 +73,14 @@ public class GridPaddingItemDecorationBuilder {
 
     public static class GridPaddingItemDecoration extends RecyclerView.ItemDecoration {
 
-        private CompositeRecyclerAdapter recyclerAdapter;
-        private WeakHashMap<Object, Boolean> paddingMap;
-        private int padding;
-        private int maxSpanSize;
-        private PaddingType paddingType;
+        CompositeRecyclerAdapter recyclerAdapter;
+        WeakHashMap<Object, Boolean> paddingMap;
+        int padding;
+        int maxSpanSize;
+        PaddingType paddingType;
 
-        private GridPaddingItemDecoration(@NonNull CompositeRecyclerAdapter recyclerAdapter, int padding, int maxSpanSize, WeakHashMap<Object, Boolean> paddingMap, PaddingType paddingType) {
+        private GridPaddingItemDecoration(@NonNull CompositeRecyclerAdapter recyclerAdapter) {
             this.recyclerAdapter = recyclerAdapter;
-            this.padding = padding;
-            this.maxSpanSize = maxSpanSize;
-            this.paddingMap = paddingMap;
-            this.paddingType = paddingType;
-        }
-
-        public void setMaxSpanSize(int maxSpanSize) {
-            this.maxSpanSize = maxSpanSize;
-        }
-
-        public void setPaddingType(PaddingType paddingType) {
-            this.paddingType = paddingType;
         }
 
         @Override

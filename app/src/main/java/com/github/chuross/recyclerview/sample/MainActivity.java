@@ -187,14 +187,14 @@ public class MainActivity extends AppCompatActivity {
          */
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SPAN_SIZE);
         recyclerView.setLayoutManager(gridLayoutManager);
-        gridLayoutManager.setSpanSizeLookup(new SpanSizeLookupBuilder(this, compositeAdapter)
-                .bind(viewItem1, SPAN_SIZE)
-                .bind(visibleChangeButton, SPAN_SIZE)
-                .bind(AppendButtonViewItem.class, SPAN_SIZE)
-                .bind(viewItem6, SPAN_SIZE)
-                .bind(viewItemAdapter, SPAN_SIZE)
-                .bind(itemAdapter1, 2, 1) //can set spanSize separately.
-                .bind(itemAdapter3, SPAN_SIZE)
+        gridLayoutManager.setSpanSizeLookup(new SpanSizeLookupBuilder(compositeAdapter)
+                .register(viewItem1, SPAN_SIZE)
+                .register(visibleChangeButton, SPAN_SIZE)
+                .register(AppendButtonViewItem.class, SPAN_SIZE)
+                .register(viewItem6, SPAN_SIZE)
+                .register(viewItemAdapter, SPAN_SIZE)
+                .register(itemAdapter1, 2)
+                .register(itemAdapter3, SPAN_SIZE)
                 .build());
 
         /*
@@ -202,8 +202,9 @@ public class MainActivity extends AppCompatActivity {
          */
         int padding = getResources().getDimensionPixelSize(R.dimen.padding);
         recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAdapter, padding, SPAN_SIZE)
+                .paddingType(GridPaddingItemDecorationBuilder.PaddingType.BOTH)
                 .put(visibleChangeButton)
-                .put(itemAdapter1)
+                .put(itemAdapter2)
                 .put(AppendButtonViewItem.class)
                 .build());
 

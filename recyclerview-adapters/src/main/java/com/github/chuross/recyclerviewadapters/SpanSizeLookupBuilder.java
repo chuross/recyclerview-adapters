@@ -16,50 +16,36 @@ import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersU
  */
 public class SpanSizeLookupBuilder {
 
-    private Context context;
     private CompositeRecyclerAdapter recyclerAdapter;
-    private WeakHashMap<Object, Pair<Integer, Integer>> spanSizeMapping = new WeakHashMap<>();
+    private WeakHashMap<Object, Integer> spanSizeMapping = new WeakHashMap<>();
 
-    public SpanSizeLookupBuilder(@NonNull Context context, @NonNull CompositeRecyclerAdapter recyclerAdapter) {
-        checkNonNull(context);
+    public SpanSizeLookupBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter) {
         checkNonNull(recyclerAdapter);
-        this.context = context;
         this.recyclerAdapter = recyclerAdapter;
     }
 
-
-    public <CLASS extends Class<? extends LocalAdapter<?>>> SpanSizeLookupBuilder bind(@NonNull CLASS adapterClass, int spanSize) {
-        return bind(adapterClass, spanSize, spanSize);
-    }
-
-    public <CLASS extends Class<? extends LocalAdapter<?>>> SpanSizeLookupBuilder bind(@NonNull CLASS adapterClass, int portraitSpanSize, int landScapeSpanSize) {
+    public <CLASS extends Class<? extends LocalAdapter<?>>> SpanSizeLookupBuilder register(@NonNull CLASS adapterClass, int spanSize) {
         checkNonNull(adapterClass);
-        spanSizeMapping.put(adapterClass, Pair.create(portraitSpanSize, landScapeSpanSize));
+        spanSizeMapping.put(adapterClass, spanSize);
         return this;
     }
 
-    public SpanSizeLookupBuilder bind(@NonNull LocalAdapter localAdapter, int spanSize) {
-        return bind(localAdapter, spanSize, spanSize);
-    }
-
-    public SpanSizeLookupBuilder bind(@NonNull LocalAdapter localAdapter, int portraitSpanSize, int landScapeSpanSize) {
+    public SpanSizeLookupBuilder register(@NonNull LocalAdapter localAdapter, int spanSize) {
         checkNonNull(localAdapter);
-        spanSizeMapping.put(localAdapter, Pair.create(portraitSpanSize, landScapeSpanSize));
+        spanSizeMapping.put(localAdapter, spanSize);
         return this;
     }
 
     public GridSpanSizeLookup build() {
-        return new GridSpanSizeLookup(context, recyclerAdapter, spanSizeMapping);
+        return new GridSpanSizeLookup(recyclerAdapter, spanSizeMapping);
     }
 
     public static class GridSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
 
-        private Context context;
-        private CompositeRecyclerAdapter recyclerAdapter;
-        private WeakHashMap<Object, Pair<Integer, Integer>> spanSizeMapping;
+        CompositeRecyclerAdapter recyclerAdapter;
+        WeakHashMap<Object, Integer> spanSizeMapping;
 
-        private GridSpanSizeLookup(@NonNull Context context, @NonNull CompositeRecyclerAdapter recyclerAdapter, @NonNull WeakHashMap<Object, Pair<Integer, Integer>> spanSizeMapping) {
-            this.context = context;
+        private GridSpanSizeLookup(@NonNull CompositeRecyclerAdapter recyclerAdapter, @NonNull WeakHashMap<Object, Integer> spanSizeMapping) {
             this.recyclerAdapter = recyclerAdapter;
             this.spanSizeMapping = spanSizeMapping;
         }
@@ -69,18 +55,13 @@ public class SpanSizeLookupBuilder {
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(position);
             if (item == null) return 1;
 
-            final Pair<Integer, Integer> spanSizePair = get(item.getLocalAdapter());
-            if (spanSizePair == null) return 1;
-
-            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                return spanSizePair.first;
-            } else {
-                return spanSizePair.second;
-            }
+            final Integer spanSize = get(item.getLocalAdapter());
+            if (spanSize == null) return 1;
+            return spanSize;
         }
 
         @Nullable
-        private Pair<Integer, Integer> get(LocalAdapter localAdapter) {
+        private Integer get(LocalAdapter localAdapter) {
             if (localAdapter == null) return null;
 
             if (spanSizeMapping.containsKey(localAdapter)) {
