@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.github.chuross.recyclerviewadapters.OnItemClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemLongPressedListener;
 import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
+import com.github.chuross.recyclerviewadapters.DragItemTouchHelperBuilder;
 import com.github.chuross.recyclerviewadapters.ViewItem;
 import com.github.chuross.recyclerviewadapters.ViewItemAdapter;
 import com.github.chuross.rx.RxItemAdapter;
@@ -109,28 +111,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // same as itemAdapter1 layout resource
-        final ItemAdapter<String, RecyclerView.ViewHolder> itemAdapter3 = new ItemAdapter<String, RecyclerView.ViewHolder>(this) {
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int itemViewType) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                return new RecyclerView.ViewHolder(inflater.inflate(R.layout.item_adapter_1, parent, false)) {
-                };
-            }
-
-            @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                ((TextView) holder.itemView.findViewById(R.id.text)).setText(get(position));
-            }
-
-            // Don't worry! This ItemAdapter will be used recycled 'R.layout.item_adapter_1' ViewHolder, if you want to use same AdapterId.
-            @Override
-            public int getAdapterId() {
-                return R.layout.item_adapter_1;
-            }
-        };
-        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
-        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
-        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1");
+        final ItemAdapter3 itemAdapter3 = new ItemAdapter3(this);
+        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1 [draggable] #1");
+        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1 [draggable] #2");
+        itemAdapter3.add("itemAdapter3# same layout as itemAdapter1 [draggable] #3");
 
         final ViewItem viewItem1 = new ViewItem(this, R.layout.item_hello_world);
         ViewItem visibleChangeButton = new ViewItem(this, R.layout.visible_toggle, new View.OnClickListener() {
@@ -237,6 +221,14 @@ public class MainActivity extends AppCompatActivity {
                 .put(itemAdapter3)
                 .build());
 
+        /*
+         * Vertical Drag support
+         */
+        ItemTouchHelper dragHelper = new DragItemTouchHelperBuilder(compositeAdapter)
+                .register(ItemAdapter3.class)
+                .build();
+        dragHelper.attachToRecyclerView(recyclerView);
+
         recyclerView.setAdapter(compositeAdapter);
     }
 
@@ -248,6 +240,31 @@ public class MainActivity extends AppCompatActivity {
 
         public AppendButtonViewItem(@NonNull Context context, @Nullable View.OnClickListener clickListener) {
             super(context, R.layout.item_append_button, clickListener);
+        }
+    }
+
+    private static class ItemAdapter3 extends ItemAdapter<String, RecyclerView.ViewHolder> {
+
+        public ItemAdapter3(@NonNull Context context) {
+            super(context);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int itemViewType) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            return new RecyclerView.ViewHolder(inflater.inflate(R.layout.item_adapter_1, parent, false)) {
+            };
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            ((TextView) holder.itemView.findViewById(R.id.text)).setText(get(position));
+        }
+
+        // Don't worry! This ItemAdapter will be used recycled 'R.layout.item_adapter_1' ViewHolder, if you want to use same AdapterId.
+        @Override
+        public int getAdapterId() {
+            return R.layout.item_adapter_1;
         }
     }
 }
