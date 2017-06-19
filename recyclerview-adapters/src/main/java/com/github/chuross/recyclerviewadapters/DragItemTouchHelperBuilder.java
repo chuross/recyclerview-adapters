@@ -17,16 +17,16 @@ public class DragItemTouchHelperBuilder {
 
     private CompositeRecyclerAdapter recyclerAdapter;
     private List<Class<? extends LocalAdapter>> acceptedClasses = new ArrayList<>();
-    private int dragFlags;
+    private int dragFlags = 0;
 
     public DragItemTouchHelperBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter) {
-        this(recyclerAdapter, UP | DOWN);
-    }
-
-    public DragItemTouchHelperBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter, int dragFlags) {
         checkNonNull(recyclerAdapter);
         this.recyclerAdapter = recyclerAdapter;
-        this.dragFlags = dragFlags;
+    }
+
+    public DragItemTouchHelperBuilder dragFlag(int dragFlag) {
+        this.dragFlags = this.dragFlags | dragFlag;
+        return this;
     }
 
     public DragItemTouchHelperBuilder register(Class<? extends LocalAdapter> clazz) {
@@ -35,19 +35,21 @@ public class DragItemTouchHelperBuilder {
     }
 
     public ItemTouchHelper build() {
-        return new ItemTouchHelper(new VerticalListDragCallback(recyclerAdapter, acceptedClasses, dragFlags));
+        DragItemCallback callback = new DragItemCallback();
+        callback.recyclerAdapter = recyclerAdapter;
+        callback.acceptedClasses = acceptedClasses;
+        callback.dragFlags = dragFlags != 0 ? dragFlags : UP | DOWN;
+
+        return new ItemTouchHelper(callback);
     }
 
-    private static class VerticalListDragCallback extends ItemTouchHelper.Callback {
+    private static class DragItemCallback extends ItemTouchHelper.Callback {
 
-        private CompositeRecyclerAdapter recyclerAdapter;
-        private List<Class<? extends LocalAdapter>> acceptedClasses;
-        private int dragFlags;
+        CompositeRecyclerAdapter recyclerAdapter;
+        List<Class<? extends LocalAdapter>> acceptedClasses;
+        int dragFlags;
 
-        private VerticalListDragCallback(CompositeRecyclerAdapter recyclerAdapter, List<Class<? extends LocalAdapter>> acceptedClasses, int dragFlags) {
-            this.recyclerAdapter = recyclerAdapter;
-            this.acceptedClasses = acceptedClasses;
-            this.dragFlags = dragFlags;
+        private DragItemCallback() {
         }
 
         @Override

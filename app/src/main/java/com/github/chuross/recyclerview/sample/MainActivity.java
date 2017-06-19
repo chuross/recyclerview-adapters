@@ -229,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
          * Vertical Drag support
          */
         ItemTouchHelper dragHelper = new DragItemTouchHelperBuilder(compositeAdapter)
+                .dragFlag(ItemTouchHelper.UP)
+                .dragFlag(ItemTouchHelper.DOWN)
                 .register(ItemAdapter3.class)
                 .build();
         dragHelper.attachToRecyclerView(recyclerView);
