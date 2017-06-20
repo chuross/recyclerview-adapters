@@ -18,6 +18,7 @@ public class DragItemTouchHelperBuilder {
     private CompositeRecyclerAdapter recyclerAdapter;
     private List<Class<? extends LocalAdapter>> acceptedClasses = new ArrayList<>();
     private int dragFlags = 0;
+    private OnItemMoveListener itemMoveListener;
 
     public DragItemTouchHelperBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter) {
         checkNonNull(recyclerAdapter);
@@ -34,11 +35,17 @@ public class DragItemTouchHelperBuilder {
         return this;
     }
 
+    public DragItemTouchHelperBuilder itemMovedListener(OnItemMoveListener itemMoveListener) {
+        this.itemMoveListener = itemMoveListener;
+        return this;
+    }
+
     public ItemTouchHelper build() {
         DragItemCallback callback = new DragItemCallback();
         callback.recyclerAdapter = recyclerAdapter;
         callback.acceptedClasses = acceptedClasses;
         callback.dragFlags = dragFlags != 0 ? dragFlags : UP | DOWN;
+        callback.itemMoveListener = itemMoveListener;
 
         return new ItemTouchHelper(callback);
     }
@@ -48,6 +55,7 @@ public class DragItemTouchHelperBuilder {
         CompositeRecyclerAdapter recyclerAdapter;
         List<Class<? extends LocalAdapter>> acceptedClasses;
         int dragFlags;
+        OnItemMoveListener itemMoveListener;
 
         private DragItemCallback() {
         }
@@ -74,6 +82,7 @@ public class DragItemTouchHelperBuilder {
             if (item.getLocalAdapter().getClass().equals(targetItem.getLocalAdapter().getClass())) {
                 BaseLocalAdapter localAdapter = (BaseLocalAdapter) item.getLocalAdapter();
                 localAdapter.notifyItemMoved(item.getLocalAdapterPosition(), targetItem.getLocalAdapterPosition());
+                if (itemMoveListener != null) itemMoveListener.onItemMoved(item, targetItem);
                 return true;
             }
 
