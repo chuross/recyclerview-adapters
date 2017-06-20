@@ -19,6 +19,7 @@ public class DragItemTouchHelperBuilder {
     private List<Class<? extends LocalAdapter>> acceptedClasses = new ArrayList<>();
     private int dragFlags = 0;
     private OnItemMoveListener itemMoveListener;
+    private OnItemTouchStateChangeListener itemTouchStateChangeListener;
 
     public DragItemTouchHelperBuilder(@NonNull CompositeRecyclerAdapter recyclerAdapter) {
         checkNonNull(recyclerAdapter);
@@ -35,8 +36,13 @@ public class DragItemTouchHelperBuilder {
         return this;
     }
 
-    public DragItemTouchHelperBuilder itemMovedListener(OnItemMoveListener itemMoveListener) {
+    public DragItemTouchHelperBuilder itemMoveListener(OnItemMoveListener itemMoveListener) {
         this.itemMoveListener = itemMoveListener;
+        return this;
+    }
+
+    public DragItemTouchHelperBuilder itemTouchStateChangeListener(OnItemTouchStateChangeListener itemTouchStateChangeListener) {
+        this.itemTouchStateChangeListener = itemTouchStateChangeListener;
         return this;
     }
 
@@ -46,6 +52,7 @@ public class DragItemTouchHelperBuilder {
         callback.acceptedClasses = acceptedClasses;
         callback.dragFlags = dragFlags != 0 ? dragFlags : UP | DOWN;
         callback.itemMoveListener = itemMoveListener;
+        callback.itemTouchStateChangeListener = itemTouchStateChangeListener;
 
         return new ItemTouchHelper(callback);
     }
@@ -56,6 +63,7 @@ public class DragItemTouchHelperBuilder {
         List<Class<? extends LocalAdapter>> acceptedClasses;
         int dragFlags;
         OnItemMoveListener itemMoveListener;
+        OnItemTouchStateChangeListener itemTouchStateChangeListener;
 
         private DragItemCallback() {
         }
@@ -70,6 +78,20 @@ public class DragItemTouchHelperBuilder {
             } else {
                 return 0;
             }
+        }
+
+        @Override
+        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            if (viewHolder == null) {
+                if (itemTouchStateChangeListener != null) itemTouchStateChangeListener.onStateChanged(null, actionState);
+                return;
+            }
+
+            LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(viewHolder.getAdapterPosition());
+            if (item == null) return;
+
+            if (itemTouchStateChangeListener != null) itemTouchStateChangeListener.onStateChanged(item, actionState);
         }
 
         @Override
