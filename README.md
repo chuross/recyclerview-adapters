@@ -16,6 +16,8 @@ repositories {
 ```
 
 2. add the dependency
+[![](https://jitpack.io/v/chuross/recyclerview-adapters.svg)](https://jitpack.io/#chuross/recyclerview-adapters)
+
 ```
 dependencies {
     compile 'com.github.chuross.recyclerview-adapters:recyclerview-adapters:1.x.x'
@@ -104,16 +106,15 @@ itemAdapter.setOnItemLongPressListener(new OnItemLongPressedListener() {
   void onItemLongPressed(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull T item) { ... }
 });
 ```
-
+## Helpers
 ### SpanSize Lookup support
 ```
 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SPAN_SIZE);
 
-SpanSizeLookup spanSizeLookup =  new SpanSizeLookupBuilder(this, compositeAdapter)
-        .bind(viewItem1, SPAN_SIZE)
-        .bind(viewItemAdapter, SPAN_SIZE)
-        .bind(itemAdapter1, 1) // specific span size
-        .bind(itemAdapter2, SPAN_SIZE)
+SpanSizeLookup spanSizeLookup =  new SpanSizeLookupBuilder(compositeAdapter)
+        .register(viewItem1, SPAN_SIZE)
+        .register(viewItemAdapter, SPAN_SIZE)
+        .register(itemAdapter2, SPAN_SIZE)
         .build();
 
 gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
@@ -121,6 +122,42 @@ gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
 // You must use CompositeRecyclerAdapter!!
 recyclerView.setAdapter(compositeRecyclerAdapter);
 ```
+
+### Divider item decoration support
+```
+int dividerHeight = getResources().getDimensionPixelSize(R.dimen.divider_height);
+
+recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter)
+        .dividerHeight(dividerHeight)
+        .dividerColor(Color.BLACK)
+        .register(itemAdapter1)
+        .register(AppendButtonViewItem.class)
+        .build());
+```
+
+### Grid padding support
+```
+int padding = getResources().getDimensionPixelSize(R.dimen.padding);
+
+recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAdapter, padding, SPAN_SIZE)
+        .paddingType(GridPaddingItemDecorationBuilder.PaddingType.BOTH)
+        .register(visibleChangeButton)
+        .register(itemAdapter2)
+        .register(AppendButtonViewItem.class)
+        .build());
+```
+
+### Item drag support
+```
+ItemTouchHelper dragHelper = new DragItemTouchHelperBuilder(compositeAdapter)
+        .dragFlag(ItemTouchHelper.UP)
+        .dragFlag(ItemTouchHelper.DOWN)
+        .register(ItemAdapter3.class)
+        .build();
+        
+dragHelper.attachToRecyclerView(recyclerView);
+```
+
 ## License
 ```
 Copyright 2017 chuross
