@@ -26,7 +26,8 @@ dependencies {
 
 #### RxJava2 support
 if you use RxJava2, you can use Rx support extension!
-This extension provide
+
+This extension provide databinding via Flowable.
 
 ```
 dependencies {
