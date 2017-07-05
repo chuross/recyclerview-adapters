@@ -97,11 +97,6 @@ itemAdapter.setOnItemClickListener(new OnItemClickListener() {
     void onItemClicked(RecyclerView.ViewHolder holder, int position, String item) { ... }
 });
 
-// item double click
-itemAdapter.setOnItemDoubleClickListener(new OnItemDoubleClickListener() {
-  void onItemDoubleClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull T item) { ... }
-});
-
 // item long click
 itemAdapter.setOnItemLongPressListener(new OnItemLongPressedListener() {
   void onItemLongPressed(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull T item) { ... }
