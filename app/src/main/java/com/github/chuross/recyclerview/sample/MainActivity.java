@@ -71,12 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(holder.itemView.getContext(), "click! adapter1:: " + item, Toast.LENGTH_SHORT).show();
             }
         });
-        itemAdapter1.setOnItemDoubleClickListener(new OnItemDoubleClickListener<String>() {
-            @Override
-            public void onItemDoubleClicked(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {
-                Toast.makeText(holder.itemView.getContext(), "double click! adapter1:: " + item, Toast.LENGTH_SHORT).show();
-            }
-        });
         itemAdapter1.setOnItemLongPressListener(new OnItemLongPressedListener<String>() {
             @Override
             public void onItemLongPressed(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull String item) {

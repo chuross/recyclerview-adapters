@@ -11,7 +11,7 @@ import java.util.List;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 
-public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends BaseItemAdapter<T, VH> implements RecyclerView.OnItemTouchListener {
+public abstract class ItemAdapter<T, VH extends RecyclerView.ViewHolder> extends BaseItemAdapter<T, VH> {
 
     private final List<T> items = new ArrayList<>();
 
