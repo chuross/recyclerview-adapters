@@ -3,6 +3,7 @@ package com.github.chuross.recyclerviewadapters;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.chuross.recyclerviewadapters.internal.LocalAdapterDataObserver;
@@ -22,6 +23,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     private Map<Integer, LocalAdapter<?>> localAdapterMapping = new HashMap<>();
     private Map<Integer, LocalAdapter<?>> unstableAdapterMapping = new HashMap<>();
     private RecyclerView recyclerView;
+    private View.OnAttachStateChangeListener recyclerViewAttachStateChangeListener;
 
     @Override
     public final int getItemViewType(final int position) {
@@ -41,9 +43,20 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         this.recyclerView = recyclerView;
+        recyclerViewAttachStateChangeListener = new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                clear();
+                recyclerView.removeOnAttachStateChangeListener(recyclerViewAttachStateChangeListener);
+            }
+        };
         for (LocalAdapter<?> localAdapter : localAdapters) {
             localAdapter.onAttachedToRecyclerView(recyclerView);
         }
