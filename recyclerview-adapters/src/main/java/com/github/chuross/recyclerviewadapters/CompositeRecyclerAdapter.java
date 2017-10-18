@@ -57,6 +57,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 recyclerView.removeOnAttachStateChangeListener(recyclerViewAttachStateChangeListener);
             }
         };
+        recyclerView.addOnAttachStateChangeListener(recyclerViewAttachStateChangeListener);
         for (LocalAdapter<?> localAdapter : localAdapters) {
             localAdapter.onAttachedToRecyclerView(recyclerView);
         }
