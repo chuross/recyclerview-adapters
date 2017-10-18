@@ -48,6 +48,7 @@ public abstract class RxItemAdapter<I, VH extends RecyclerView.ViewHolder> exten
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         if (disposable != null) disposable.dispose();
+        if (cachedItems != null) cachedItems = null;
         super.onDetachedFromRecyclerView(recyclerView);
     }
 
