@@ -1,11 +1,8 @@
 package com.github.chuross.recyclerviewadapters;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Pair;
 
 import java.util.WeakHashMap;
 
