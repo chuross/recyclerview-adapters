@@ -1,1 +1,1 @@
-include ':app', ':recyclerview-adapters', ':recyclerview-adapters-rx'
+include ':app', ':recyclerview-adapters', ':recyclerview-adapters-rx', ':recyclerview-adapters-databinding'
