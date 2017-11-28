@@ -2,6 +2,8 @@ package com.github.chuross.recyclerviewadapters.databinding;
 
 
 import android.content.Context;
+import android.databinding.Observable;
+import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,8 @@ public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> 
 
     private ObservableList<I> observableList;
     private ObservableList.OnListChangedCallback<ObservableList<I>> callback;
+    private ObservableField<Boolean> visibleChangeField;
+    private Observable.OnPropertyChangedCallback visibleChangeCallback;
 
     public BindingItemAdapter(@NonNull Context context, @NonNull ObservableList<I> observableList) {
         super(context);
@@ -54,6 +58,7 @@ public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> 
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         if (callback != null) observableList.removeOnListChangedCallback(callback);
+        if (visibleChangeCallback != null) visibleChangeField.removeOnPropertyChangedCallback(visibleChangeCallback);
         super.onDetachedFromRecyclerView(recyclerView);
     }
 
@@ -66,5 +71,16 @@ public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> 
     @Override
     public I get(int position) {
         return observableList.get(position);
+    }
+
+    public void bindVisible(final ObservableField<Boolean> visibleChangeField) {
+        visibleChangeCallback = new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                setVisible(visibleChangeField.get());
+            }
+        };
+        visibleChangeField.addOnPropertyChangedCallback(visibleChangeCallback);
+        this.visibleChangeField = visibleChangeField;
     }
 }
