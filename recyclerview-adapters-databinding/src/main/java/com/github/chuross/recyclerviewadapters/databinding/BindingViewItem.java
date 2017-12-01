@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.chuross.recyclerviewadapters.BaseLocalAdapter;
-import com.github.chuross.recyclerviewadapters.ViewItem;
+
 
 public class BindingViewItem<B extends ViewDataBinding> extends BaseLocalAdapter<BindingViewHolder<B>> implements Cloneable {
 
