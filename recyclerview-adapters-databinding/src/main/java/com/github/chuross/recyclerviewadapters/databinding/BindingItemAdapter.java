@@ -74,6 +74,8 @@ public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> 
     }
 
     public void bindVisible(final ObservableField<Boolean> visibleChangeField) {
+        if (visibleChangeField.get() != null) setVisible(visibleChangeField.get());
+
         visibleChangeCallback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {

@@ -61,6 +61,8 @@ public class BindingViewItem<B extends ViewDataBinding> extends BaseLocalAdapter
     }
 
     public void bindVisible(final ObservableField<Boolean> visibleChangeField) {
+        if (visibleChangeField.get() != null) setVisible(visibleChangeField.get());
+
         visibleChangeCallback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
