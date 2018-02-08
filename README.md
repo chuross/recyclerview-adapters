@@ -93,7 +93,7 @@ list.setAdapter(compositeAdapter);
  */
 ```
 
-### get child items
+### Get child items
 ```java
 LocalAdapterItem localItem = compositeAdapter.getLocalAdapterItem(100);
 
@@ -104,7 +104,22 @@ localItem.getLocalAdapterPosition();
 itemAdapter.get(localItem.getLocalAdapterPosition());
 ```
 
-### listeners
+### Nested support
+CompositeRecyclerAdapter is nestable.
+
+```java
+CompositeRecyclerAdapter compositeAdapter = new CompositeRecyclerAdapter();
+
+// create nested adapter
+CompositeRecyclerAdapter nestedAdapter = new CompositeRecyclerAdapter();
+nestedAdapter.add(new ViewItem(context));
+nestedAdapter.add(new ViewItem(context));
+
+// add nested adapter
+compositeAdapter.add(nestedAdapter);
+```
+
+### Listeners
 ```java
 ItemAdapter itemAdapter = new ItemAdapter() { ... }
 
@@ -118,6 +133,7 @@ itemAdapter.setOnItemLongPressListener(new OnItemLongPressedListener() {
   void onItemLongPressed(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull T item) { ... }
 });
 ```
+
 ## Helpers
 ### SpanSize Lookup support
 ```java

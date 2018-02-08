@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 
+import com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils;
+
 import java.util.WeakHashMap;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
@@ -52,14 +54,14 @@ public class SpanSizeLookupBuilder {
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(position);
             if (item == null) return 1;
 
-            final Integer spanSize = get(item.getLocalAdapter());
+            final Integer spanSize = get(item);
             if (spanSize == null) return 1;
             return spanSize;
         }
 
         @Nullable
-        private Integer get(LocalAdapter localAdapter) {
-            if (localAdapter == null) return null;
+        private Integer get(LocalAdapterItem item) {
+            LocalAdapter localAdapter = RecyclerAdaptersUtils.getLocalAdapter(item);
 
             if (spanSizeMapping.containsKey(localAdapter)) {
                 return spanSizeMapping.get(localAdapter);
