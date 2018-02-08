@@ -9,7 +9,7 @@ This adapter also has multiple ItemViewType, if needed.
 ## Download
 ### Gradle
 1. add JitPack repository to your project root `build.gradle`.
-```
+```groovy
 repositories {
     maven { url "https://jitpack.io" }
 }
@@ -18,7 +18,7 @@ repositories {
 2. add the dependency
 [![](https://jitpack.io/v/chuross/recyclerview-adapters.svg)](https://jitpack.io/#chuross/recyclerview-adapters)
 
-```
+```groovy
 dependencies {
     compile 'com.github.chuross.recyclerview-adapters:recyclerview-adapters:1.x.x'
 }
@@ -29,7 +29,7 @@ if you use RxJava2, you can use Rx support extension!
 
 This extension provide databinding via Flowable.
 
-```
+```groovy
 dependencies {
     compile 'com.github.chuross.recyclerview-adapters:recyclerview-adapters:1.x.x'
     compile 'com.github.chuross.recyclerview-adapters:recyclerview-adapters-rx:1.x.x'
@@ -42,7 +42,7 @@ See sample project.
 ### Header and footer RecyclerView
 Basic sample
 
-```
+```java
 CompositeRecyclerAdapter compositeAdapter = new CompositeRecyclerAdapter();
 
 // header
@@ -78,7 +78,7 @@ list.setAdapter(compositeAdapter); // or list.setAdapter(itemAdapter);
 ```
 
 ### get child items
-```
+```java
 LocalAdapterItem localItem = compositeAdapter.getLocalAdapterItem(100);
 
 localItem.getLocalAdapter();
@@ -89,7 +89,7 @@ itemAdapter.get(localItem);
 ```
 
 ### listeners
-```
+```java
 ItemAdapter itemAdapter = new ItemAdapter() { ... }
 
 // item click
@@ -104,7 +104,7 @@ itemAdapter.setOnItemLongPressListener(new OnItemLongPressedListener() {
 ```
 ## Helpers
 ### SpanSize Lookup support
-```
+```java
 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SPAN_SIZE);
 
 SpanSizeLookup spanSizeLookup =  new SpanSizeLookupBuilder(compositeAdapter)
@@ -120,7 +120,7 @@ recyclerView.setAdapter(compositeRecyclerAdapter);
 ```
 
 ### Divider item decoration support
-```
+```java
 int dividerHeight = getResources().getDimensionPixelSize(R.dimen.divider_height);
 
 recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter)
@@ -132,7 +132,7 @@ recyclerView.addItemDecoration(new DividerItemDecorationBuilder(compositeAdapter
 ```
 
 ### Grid padding support
-```
+```java
 int padding = getResources().getDimensionPixelSize(R.dimen.padding);
 
 recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAdapter, padding, SPAN_SIZE)
@@ -144,7 +144,7 @@ recyclerView.addItemDecoration(new GridPaddingItemDecorationBuilder(compositeAda
 ```
 
 ### Item drag support
-```
+```java
 ItemTouchHelper dragHelper = new DragItemTouchHelperBuilder(compositeAdapter)
         .dragFlag(ItemTouchHelper.UP)
         .dragFlag(ItemTouchHelper.DOWN)
