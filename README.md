@@ -49,7 +49,7 @@ dependencies {
 ```
 
 ## Usage
-See sample project.
+See [sample project](https://github.com/chuross/recyclerview-adapters/blob/master/app/src/main/kotlin/com/github/chuross/recyclerview/sample/MainActivity.kt).
 
 ### Header and footer RecyclerView
 Basic sample
