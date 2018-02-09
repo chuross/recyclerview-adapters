@@ -36,6 +36,18 @@ dependencies {
 }
 ```
 
+#### DataBinding support
+if you use Android DataBinding, you can use binding support extension!
+
+This extension provide databinding via ObservableList.
+
+```groovy
+dependencies {
+    compile 'com.github.chuross.recyclerview-adapters:recyclerview-adapters:1.x.x'
+    compile 'com.github.chuross.recyclerview-adapters:recyclerview-adapters-databinding:1.x.x'
+}
+```
+
 ## Usage
 See sample project.
 
