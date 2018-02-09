@@ -7,6 +7,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.WeakHashMap;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
@@ -16,7 +17,7 @@ import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersU
 public class DragItemTouchHelperBuilder {
 
     private CompositeRecyclerAdapter recyclerAdapter;
-    private List<Class<? extends LocalAdapter>> acceptedClasses = new ArrayList<>();
+    private WeakHashMap<Object, Boolean> draggingMap = new WeakHashMap<>();
     private int dragFlags = 0;
     private OnItemMoveListener itemMoveListener;
     private OnItemTouchStateChangeListener itemTouchStateChangeListener;
@@ -32,7 +33,14 @@ public class DragItemTouchHelperBuilder {
     }
 
     public DragItemTouchHelperBuilder register(Class<? extends LocalAdapter> clazz) {
-        acceptedClasses.add(clazz);
+        checkNonNull(clazz);
+        draggingMap.put(clazz, true);
+        return this;
+    }
+
+    public DragItemTouchHelperBuilder register(@NonNull LocalAdapter localAdapter) {
+        checkNonNull(localAdapter);
+        draggingMap.put(localAdapter, true);
         return this;
     }
 
@@ -49,7 +57,7 @@ public class DragItemTouchHelperBuilder {
     public ItemTouchHelper build() {
         DragItemCallback callback = new DragItemCallback();
         callback.recyclerAdapter = recyclerAdapter;
-        callback.acceptedClasses = acceptedClasses;
+        callback.draggingMap = draggingMap;
         callback.dragFlags = dragFlags != 0 ? dragFlags : UP | DOWN;
         callback.itemMoveListener = itemMoveListener;
         callback.itemTouchStateChangeListener = itemTouchStateChangeListener;
@@ -60,7 +68,7 @@ public class DragItemTouchHelperBuilder {
     private static class DragItemCallback extends ItemTouchHelper.Callback {
 
         CompositeRecyclerAdapter recyclerAdapter;
-        List<Class<? extends LocalAdapter>> acceptedClasses;
+        WeakHashMap<Object, Boolean> draggingMap;
         int dragFlags;
         OnItemMoveListener itemMoveListener;
         OnItemTouchStateChangeListener itemTouchStateChangeListener;
@@ -73,7 +81,8 @@ public class DragItemTouchHelperBuilder {
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(viewHolder.getAdapterPosition());
             if (item == null) return 0;
 
-            if (acceptedClasses.contains(item.getLocalAdapter().getClass())) {
+            if (draggingMap.containsKey(item.getLocalAdapter().getClass())
+                    || draggingMap.containsKey(item.getLocalAdapter())) {
                 return makeFlag(ACTION_STATE_DRAG, dragFlags);
             } else {
                 return 0;

@@ -1,4 +1,4 @@
-package com.github.chuross.recyclerview.sample;
+package com.github.chuross.recyclerview.legacy;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.chuross.recyclerview.sample.R;
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
 import com.github.chuross.recyclerviewadapters.DividerItemDecorationBuilder;
 import com.github.chuross.recyclerviewadapters.GridPaddingItemDecorationBuilder;
 import com.github.chuross.recyclerviewadapters.ItemAdapter;
 import com.github.chuross.recyclerviewadapters.OnItemClickListener;
-import com.github.chuross.recyclerviewadapters.OnItemDoubleClickListener;
 import com.github.chuross.recyclerviewadapters.OnItemLongPressedListener;
 import com.github.chuross.recyclerviewadapters.SpanSizeLookupBuilder;
 import com.github.chuross.recyclerviewadapters.DragItemTouchHelperBuilder;
