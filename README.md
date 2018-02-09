@@ -86,7 +86,11 @@ compositeAdapter.add(footer);
 RecyclerView list = //ex (RecyclerView) findViewById(this, R.id.list);
 
 list.setLayoutManager(new LinearLayoutManager(this));
-list.setAdapter(compositeAdapter); // or list.setAdapter(itemAdapter);
+list.setAdapter(compositeAdapter);
+/**
+ * also can set ItemAdapter only.
+ * ex) list.setAdapter(itemAdapter);
+ */
 ```
 
 ### get child items
@@ -97,7 +101,7 @@ localItem.getLocalAdapter();
 localItem.getLocalAdapterPosition();
 
 // ex)
-itemAdapter.get(localItem);
+itemAdapter.get(localItem.getLocalAdapterPosition());
 ```
 
 ### listeners
