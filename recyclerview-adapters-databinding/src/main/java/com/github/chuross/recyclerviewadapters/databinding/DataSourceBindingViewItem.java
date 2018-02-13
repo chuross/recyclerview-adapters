@@ -32,8 +32,8 @@ public class DataSourceBindingViewItem<T, BINDING extends ViewDataBinding> exten
     }
 
     @Override
-    public void onViewDetachedFromWindow(BindingViewHolder<BINDING> holder) {
-        super.onViewDetachedFromWindow(holder);
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
         if (callback == null) return;
         source.removeOnPropertyChangedCallback(callback);
     }
