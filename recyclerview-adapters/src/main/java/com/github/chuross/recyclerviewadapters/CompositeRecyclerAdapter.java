@@ -175,6 +175,8 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Nullable
     public LocalAdapterItem getLocalAdapterItem(final int position) {
+        if (position < 0) return null;
+
         int offset = 0;
         for (LocalAdapter localAdapter : localAdapters) {
             if (!localAdapter.isVisible()) continue;
