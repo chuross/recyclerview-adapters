@@ -6,6 +6,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils;
+
 import java.util.WeakHashMap;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
@@ -97,7 +99,9 @@ public class GridPaddingItemDecorationBuilder {
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(position);
             if (item == null) return false;
 
-            return paddingMap.containsKey(item.getLocalAdapter()) || paddingMap.containsKey(item.getLocalAdapter().getClass());
+            LocalAdapter localAdapter = RecyclerAdaptersUtils.getLocalAdapter(item);
+
+            return paddingMap.containsKey(localAdapter) || paddingMap.containsKey(localAdapter.getClass());
         }
 
         private int getPaddingLeft(int index, int spanSize) {

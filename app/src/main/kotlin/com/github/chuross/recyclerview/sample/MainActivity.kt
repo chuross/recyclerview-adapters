@@ -60,6 +60,21 @@ class MainActivity : AppCompatActivity() {
             it.add("itemAdapter3# same as itemAdapter1's layout [draggable] #3")
         }
 
+        val nestedTextAdapter = TextItemAdapter(this).also {
+            it.add("nested item adapter #1-1")
+            it.add("nested item adapter #1-1")
+        }
+        val deepNestedTextAdapter = TextItemAdapter(this, Color.parseColor("#388E3C")).also {
+            it.add("deep nested item [draggable] #2-1")
+            it.add("deep nested item [draggable] #2-2")
+        }
+        val nestedAdapter = CompositeRecyclerAdapter().also {
+            it.add(nestedTextAdapter)
+            it.add(CompositeRecyclerAdapter().also {
+                it.add(deepNestedTextAdapter)
+            })
+        }
+
         val viewItemAdapter = ViewItemAdapter(this).also {
             it.add(ViewItem(this, R.layout.item_footer_1))
             it.add(ViewItem(this, R.layout.item_footer_2))
@@ -80,6 +95,7 @@ class MainActivity : AppCompatActivity() {
                 itemAdapter2,
                 itemAdapter2AppendButton,
                 itemAdapter3,
+                nestedAdapter,
                 viewItemAdapter,
                 viewItemAdapterAppendButton
         )
@@ -107,6 +123,8 @@ class MainActivity : AppCompatActivity() {
                 .register(headerVisibilityToggleButton, maxSpanSize)
                 .register(itemAdapter1, maxSpanSize)
                 .register(itemAdapter3, maxSpanSize)
+                .register(nestedTextAdapter, maxSpanSize)
+                .register(deepNestedTextAdapter, maxSpanSize)
                 .register(viewItemAdapter, maxSpanSize)
                 .register(AppendButtonViewItem::class.java, maxSpanSize) //can also register Class
                 .build()
@@ -124,6 +142,12 @@ class MainActivity : AppCompatActivity() {
                 .register(AppendButtonViewItem::class.java)
                 .build())
 
+        val nestedItemPadding = 64
+        recyclerView.addItemDecoration(GridPaddingItemDecorationBuilder(compositeRecyclerAdapter, nestedItemPadding, maxSpanSize)
+                .paddingType(GridPaddingItemDecorationBuilder.PaddingType.VERTICAL)
+                .register(deepNestedTextAdapter)
+                .build())
+
 
         /**
          * List item divider support
@@ -137,12 +161,20 @@ class MainActivity : AppCompatActivity() {
                 .register(itemAdapter1)
                 .register(itemAdapter1AppendButton)
                 .register(itemAdapter2AppendButton)
+                .register(nestedTextAdapter)
+                .register(deepNestedTextAdapter)
                 .build())
 
         recyclerView.addItemDecoration(DividerItemDecorationBuilder(compositeRecyclerAdapter)
                 .dividerHeight(dividerHeight)
                 .dividerColor(Color.MAGENTA)
                 .register(itemAdapter3)
+                .build())
+
+        recyclerView.addItemDecoration(DividerItemDecorationBuilder(compositeRecyclerAdapter)
+                .dividerHeight(dividerHeight)
+                .dividerColor(Color.parseColor("#388E3C"))
+                .register(deepNestedTextAdapter)
                 .build())
 
 
@@ -153,6 +185,7 @@ class MainActivity : AppCompatActivity() {
                 .dragFlag(ItemTouchHelper.UP)
                 .dragFlag(ItemTouchHelper.DOWN)
                 .register(itemAdapter3)
+                .register(deepNestedTextAdapter)
                 .build()
         dragHelper.attachToRecyclerView(recyclerView)
     }

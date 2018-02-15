@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils;
+
 import java.util.WeakHashMap;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
@@ -81,12 +81,18 @@ public class DragItemTouchHelperBuilder {
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(viewHolder.getAdapterPosition());
             if (item == null) return 0;
 
-            if (draggingMap.containsKey(item.getLocalAdapter().getClass())
-                    || draggingMap.containsKey(item.getLocalAdapter())) {
+            if (isRegistered(item)) {
                 return makeFlag(ACTION_STATE_DRAG, dragFlags);
             } else {
                 return 0;
             }
+        }
+
+        private boolean isRegistered(LocalAdapterItem item) {
+            LocalAdapter localAdapter = RecyclerAdaptersUtils.getLocalAdapter(item);
+
+            return draggingMap.containsKey(localAdapter.getClass())
+                    || draggingMap.containsKey(localAdapter);
         }
 
         @Override
@@ -108,16 +114,16 @@ public class DragItemTouchHelperBuilder {
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(viewHolder.getAdapterPosition());
             LocalAdapterItem targetItem = recyclerAdapter.getLocalAdapterItem(target.getAdapterPosition());
 
-            if (item == null || targetItem == null || !item.getLocalAdapter().equals(targetItem.getLocalAdapter())) return false;
+            if (item == null || targetItem == null) return false;
 
-            if (item.getLocalAdapter().getClass().equals(targetItem.getLocalAdapter().getClass())) {
-                BaseLocalAdapter localAdapter = (BaseLocalAdapter) item.getLocalAdapter();
-                localAdapter.notifyItemMoved(item.getLocalAdapterPosition(), targetItem.getLocalAdapterPosition());
-                if (itemMoveListener != null) itemMoveListener.onItemMoved(item, targetItem);
-                return true;
-            }
+            LocalAdapter localAdapter = RecyclerAdaptersUtils.getLocalAdapter(item);
+            LocalAdapter targetLocalAdapter = RecyclerAdaptersUtils.getLocalAdapter(targetItem);
 
-            return false;
+            if (!localAdapter.equals(targetLocalAdapter)) return false;
+
+            ((RecyclerView.Adapter)item.getLocalAdapter()).notifyItemMoved(item.getLocalAdapterPosition(), targetItem.getLocalAdapterPosition());
+            if (itemMoveListener != null) itemMoveListener.onItemMoved(item, targetItem);
+            return true;
         }
 
         @Override

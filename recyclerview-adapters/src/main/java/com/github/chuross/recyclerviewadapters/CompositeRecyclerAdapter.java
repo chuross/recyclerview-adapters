@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.github.chuross.recyclerviewadapters.internal.LocalAdapterDataObserver;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,13 +18,15 @@ import java.util.Map;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 
-public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements LocalAdapter<RecyclerView.ViewHolder> {
 
     private List<LocalAdapter<?>> localAdapters = new ArrayList<>();
     private Map<Integer, LocalAdapter<?>> localAdapterMapping = new HashMap<>();
     private Map<Integer, LocalAdapter<?>> unstableAdapterMapping = new HashMap<>();
     private RecyclerView recyclerView;
     private View.OnAttachStateChangeListener recyclerViewAttachStateChangeListener;
+    private WeakReference<CompositeRecyclerAdapter> parentAdapter;
+    private boolean visible = true;
 
     @Override
     public final int getItemViewType(final int position) {
@@ -245,6 +248,54 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         localAdapters.clear();
         localAdapterMapping.clear();
         unstableAdapterMapping.clear();
+        notifyDataSetChanged();
+    }
+
+    /**
+     * nested support
+     */
+    @Override
+    public boolean isVisible() {
+        return visible;
+    }
+
+    @Override
+    public int getAdapterId() {
+        return 0;
+    }
+
+    @Override
+    public boolean hasStableItemViewType() {
+        return false;
+    }
+
+    @Override
+    public CompositeRecyclerAdapter getParentAdapter() {
+        return parentAdapter != null ? parentAdapter.get() : null;
+    }
+
+    @Override
+    public void bindParentAdapter(@Nullable CompositeRecyclerAdapter adapter, @Nullable RecyclerView.AdapterDataObserver dataObserver) {
+        if (hasParentAdapter()) {
+            throw new IllegalStateException("Adapter already has parentAdapter.");
+        }
+        parentAdapter = new WeakReference<>(adapter);
+        registerAdapterDataObserver(dataObserver);
+    }
+
+    @Override
+    public void unBindParentAdapter() {
+        parentAdapter.clear();
+        parentAdapter = null;
+    }
+
+    @Override
+    public boolean hasParentAdapter() {
+        return parentAdapter != null && parentAdapter.get() != null;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
         notifyDataSetChanged();
     }
 }

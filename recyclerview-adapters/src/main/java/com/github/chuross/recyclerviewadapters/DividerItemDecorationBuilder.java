@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils;
+
 import java.util.WeakHashMap;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
@@ -87,8 +89,7 @@ public class DividerItemDecorationBuilder {
 
                 if (adapterItem == null) continue;
 
-                if (!decorationMap.containsKey(adapterItem.getLocalAdapter())
-                        && !decorationMap.containsKey(adapterItem.getLocalAdapter().getClass())) {
+                if (!isRegistered(adapterItem)) {
                     continue;
                 }
 
@@ -97,6 +98,13 @@ public class DividerItemDecorationBuilder {
 
                 canvas.drawLine(left, bottom, right, bottom, dividerPaint);
             }
+        }
+
+        private boolean isRegistered(LocalAdapterItem item) {
+            LocalAdapter localAdapter = RecyclerAdaptersUtils.getLocalAdapter(item);
+
+            return decorationMap.containsKey(localAdapter)
+                    || decorationMap.containsKey(localAdapter.getClass());
         }
 
         @Override
