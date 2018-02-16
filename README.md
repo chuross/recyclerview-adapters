@@ -104,7 +104,7 @@ localItem.getLocalAdapterPosition();
 itemAdapter.get(localItem.getLocalAdapterPosition());
 ```
 
-### Nested support
+### Nesting support
 CompositeRecyclerAdapter is nestable.
 
 ```java
