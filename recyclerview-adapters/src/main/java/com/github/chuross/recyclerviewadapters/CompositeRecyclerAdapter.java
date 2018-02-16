@@ -89,7 +89,7 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
         LocalAdapterItem localAdapterItem = getLocalAdapterItem(holder.getAdapterPosition());
 
-        if (localAdapterItem == null) super.onFailedToRecycleView(holder);
+        if (localAdapterItem == null) return super.onFailedToRecycleView(holder);
 
         localAdapterItem.getLocalAdapter().onFailedToRecycleView(holder);
         return super.onFailedToRecycleView(holder);
