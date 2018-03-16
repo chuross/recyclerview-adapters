@@ -53,6 +53,9 @@ class MainActivity : AppCompatActivity() {
             val value = "RxItemAdapter2#" + itemAdapter2.itemCount.toString()
             itemAdapter2RxSource.onNext(itemAdapter2RxSource.value.plus(value))
         })
+        val itemAdapter2VisibilityToggleButton = ViewItem(this, R.layout.visible_toggle, View.OnClickListener {
+            itemAdapter2.setVisible(!itemAdapter2.isVisible, true)
+        })
 
         val itemAdapter3 = TextItemAdapter(this, Color.MAGENTA).also {
             it.add("itemAdapter3# same as itemAdapter1's layout [draggable] #1")
@@ -94,6 +97,7 @@ class MainActivity : AppCompatActivity() {
                 itemAdapter1AppendButton,
                 itemAdapter2,
                 itemAdapter2AppendButton,
+                itemAdapter2VisibilityToggleButton,
                 itemAdapter3,
                 nestedAdapter,
                 viewItemAdapter,
@@ -122,6 +126,7 @@ class MainActivity : AppCompatActivity() {
                 .register(headerViewItem, maxSpanSize)
                 .register(headerVisibilityToggleButton, maxSpanSize)
                 .register(itemAdapter1, maxSpanSize)
+                .register(itemAdapter2VisibilityToggleButton, maxSpanSize)
                 .register(itemAdapter3, maxSpanSize)
                 .register(nestedTextAdapter, maxSpanSize)
                 .register(deepNestedTextAdapter, maxSpanSize)
