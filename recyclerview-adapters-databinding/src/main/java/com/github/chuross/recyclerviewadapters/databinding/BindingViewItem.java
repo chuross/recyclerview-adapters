@@ -56,17 +56,19 @@ public class BindingViewItem<B extends ViewDataBinding> extends BaseLocalAdapter
 
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        if (visibleChangeCallback != null) visibleChangeField.removeOnPropertyChangedCallback(visibleChangeCallback);
+        releaseVisibleChangeBinding();
         super.onDetachedFromRecyclerView(recyclerView);
     }
 
     public void bindVisible(final ObservableField<Boolean> visibleChangeField) {
         if (visibleChangeField.get() != null) setVisible(visibleChangeField.get());
 
+        releaseVisibleChangeBinding();
+
         visibleChangeCallback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                setVisible(visibleChangeField.get());
+                setVisible(visibleChangeField.get(), true);
             }
         };
         visibleChangeField.addOnPropertyChangedCallback(visibleChangeCallback);
@@ -80,6 +82,16 @@ public class BindingViewItem<B extends ViewDataBinding> extends BaseLocalAdapter
 
     public BindingViewItem<B> clone() {
         return new BindingViewItem<>(getContext(), layoutResourceId);
+    }
+
+    private void releaseVisibleChangeBinding() {
+        if (visibleChangeField == null || visibleChangeCallback == null) {
+            return;
+        }
+
+        visibleChangeField.removeOnPropertyChangedCallback(visibleChangeCallback);
+        visibleChangeField = null;
+        visibleChangeCallback = null;
     }
 
 }
