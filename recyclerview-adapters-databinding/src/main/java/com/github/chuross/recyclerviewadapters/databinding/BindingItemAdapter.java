@@ -58,7 +58,7 @@ public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> 
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         if (callback != null) observableList.removeOnListChangedCallback(callback);
-        if (visibleChangeCallback != null) visibleChangeField.removeOnPropertyChangedCallback(visibleChangeCallback);
+        releaseVisibleChangeBinding();
         super.onDetachedFromRecyclerView(recyclerView);
     }
 
@@ -76,6 +76,8 @@ public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> 
     public void bindVisible(final ObservableField<Boolean> visibleChangeField) {
         if (visibleChangeField.get() != null) setVisible(visibleChangeField.get());
 
+        releaseVisibleChangeBinding();
+
         visibleChangeCallback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -84,5 +86,15 @@ public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> 
         };
         visibleChangeField.addOnPropertyChangedCallback(visibleChangeCallback);
         this.visibleChangeField = visibleChangeField;
+    }
+
+    private void releaseVisibleChangeBinding() {
+        if (visibleChangeField == null || visibleChangeCallback == null) {
+            return;
+        }
+
+        visibleChangeField.removeOnPropertyChangedCallback(visibleChangeCallback);
+        visibleChangeField = null;
+        visibleChangeCallback = null;
     }
 }
