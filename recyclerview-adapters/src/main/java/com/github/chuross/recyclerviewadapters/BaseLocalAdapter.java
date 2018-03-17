@@ -31,6 +31,8 @@ public abstract class BaseLocalAdapter<VH extends RecyclerView.ViewHolder> exten
     }
 
     public void setVisible(boolean visible, boolean animated) {
+        if (isVisible() == visible) return;
+
         if (!animated) {
             this.visible = visible;
             notifyDataSetChanged();

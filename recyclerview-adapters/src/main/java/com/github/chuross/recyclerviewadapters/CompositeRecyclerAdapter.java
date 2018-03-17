@@ -259,6 +259,28 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return visible;
     }
 
+    public void setVisible(boolean visible) {
+        setVisible(visible, false);
+    }
+
+    public void setVisible(boolean visible, boolean animated) {
+        if (isVisible() == visible) return;
+
+        if (!animated) {
+            this.visible = visible;
+            notifyDataSetChanged();
+            return;
+        }
+
+        if (visible) {
+            this.visible = visible;
+            notifyItemRangeInserted(0, getTotalCount());
+        } else {
+            notifyItemRangeRemoved(0, getTotalCount());
+            this.visible = visible;
+        }
+    }
+
     @Override
     public int getAdapterId() {
         return 0;
@@ -294,8 +316,4 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return parentAdapter != null && parentAdapter.get() != null;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-        notifyDataSetChanged();
-    }
 }

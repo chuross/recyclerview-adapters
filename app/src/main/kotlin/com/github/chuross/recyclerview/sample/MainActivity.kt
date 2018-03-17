@@ -77,6 +77,9 @@ class MainActivity : AppCompatActivity() {
                 it.add(deepNestedTextAdapter)
             })
         }
+        val nestedAdapterVisibilityToggleButton = ViewItem(this, R.layout.visible_toggle, View.OnClickListener {
+            nestedAdapter.setVisible(!nestedAdapter.isVisible, true)
+        })
 
         val viewItemAdapter = ViewItemAdapter(this).also {
             it.add(ViewItem(this, R.layout.item_footer_1))
@@ -100,6 +103,7 @@ class MainActivity : AppCompatActivity() {
                 itemAdapter2VisibilityToggleButton,
                 itemAdapter3,
                 nestedAdapter,
+                nestedAdapterVisibilityToggleButton,
                 viewItemAdapter,
                 viewItemAdapterAppendButton
         )
@@ -129,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                 .register(itemAdapter2VisibilityToggleButton, maxSpanSize)
                 .register(itemAdapter3, maxSpanSize)
                 .register(nestedTextAdapter, maxSpanSize)
+                .register(nestedAdapterVisibilityToggleButton, maxSpanSize)
                 .register(deepNestedTextAdapter, maxSpanSize)
                 .register(viewItemAdapter, maxSpanSize)
                 .register(AppendButtonViewItem::class.java, maxSpanSize) //can also register Class
