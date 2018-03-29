@@ -26,12 +26,12 @@ public abstract class BaseItemAdapter<I, VH extends RecyclerView.ViewHolder> ext
     @Override
     public void onViewAttachedToWindow(final VH holder) {
         super.onViewAttachedToWindow(holder);
-        final int position = getPosition(holder);
-        if (position < 0) return;
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final int position = getPosition(holder);
+                if (position < 0) return;
                 if (clickListener != null) clickListener.onItemClicked(holder, position, get(position));
             }
         });
@@ -39,6 +39,8 @@ public abstract class BaseItemAdapter<I, VH extends RecyclerView.ViewHolder> ext
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                final int position = getPosition(holder);
+                if (position < 0) return false;
                 if (longPressedListener != null) longPressedListener.onItemLongPressed(holder, position, get(position));
                 return true;
             }
