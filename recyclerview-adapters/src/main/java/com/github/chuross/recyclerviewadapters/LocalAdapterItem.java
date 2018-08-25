@@ -1,6 +1,6 @@
 package com.github.chuross.recyclerviewadapters;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class LocalAdapterItem {
 

@@ -1,17 +1,14 @@
 package com.github.chuross.recyclerviewadapters;
 
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-
 import com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils;
 
 import java.util.WeakHashMap;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
-import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
-import static android.support.v7.widget.helper.ItemTouchHelper.UP;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 
 public class DragItemTouchHelperBuilder {
@@ -58,7 +55,7 @@ public class DragItemTouchHelperBuilder {
         DragItemCallback callback = new DragItemCallback();
         callback.recyclerAdapter = recyclerAdapter;
         callback.draggingMap = draggingMap;
-        callback.dragFlags = dragFlags != 0 ? dragFlags : UP | DOWN;
+        callback.dragFlags = dragFlags != 0 ? dragFlags : ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         callback.itemMoveListener = itemMoveListener;
         callback.itemTouchStateChangeListener = itemTouchStateChangeListener;
 
@@ -82,7 +79,7 @@ public class DragItemTouchHelperBuilder {
             if (item == null) return 0;
 
             if (isRegistered(item)) {
-                return makeFlag(ACTION_STATE_DRAG, dragFlags);
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, dragFlags);
             } else {
                 return 0;
             }
@@ -99,14 +96,16 @@ public class DragItemTouchHelperBuilder {
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
             super.onSelectedChanged(viewHolder, actionState);
             if (viewHolder == null) {
-                if (itemTouchStateChangeListener != null) itemTouchStateChangeListener.onStateChanged(null, actionState);
+                if (itemTouchStateChangeListener != null)
+                    itemTouchStateChangeListener.onStateChanged(null, actionState);
                 return;
             }
 
             LocalAdapterItem item = recyclerAdapter.getLocalAdapterItem(viewHolder.getAdapterPosition());
             if (item == null) return;
 
-            if (itemTouchStateChangeListener != null) itemTouchStateChangeListener.onStateChanged(item, actionState);
+            if (itemTouchStateChangeListener != null)
+                itemTouchStateChangeListener.onStateChanged(item, actionState);
         }
 
         @Override
@@ -121,7 +120,7 @@ public class DragItemTouchHelperBuilder {
 
             if (!localAdapter.equals(targetLocalAdapter)) return false;
 
-            ((RecyclerView.Adapter)item.getLocalAdapter()).notifyItemMoved(item.getLocalAdapterPosition(), targetItem.getLocalAdapterPosition());
+            ((RecyclerView.Adapter) item.getLocalAdapter()).notifyItemMoved(item.getLocalAdapterPosition(), targetItem.getLocalAdapterPosition());
             if (itemMoveListener != null) itemMoveListener.onItemMoved(item, targetItem);
             return true;
         }

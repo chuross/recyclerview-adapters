@@ -1,16 +1,16 @@
 package com.github.chuross.recyclerviewadapters.internal;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
 import com.github.chuross.recyclerviewadapters.LocalAdapter;
 import com.github.chuross.recyclerviewadapters.LocalAdapterItem;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public final class RecyclerAdaptersUtils {
 
     public static void checkNonNull(@Nullable Object object) {
-        if(object == null) {
+        if (object == null) {
             throw new NullPointerException("object is null.");
         }
     }

@@ -1,8 +1,5 @@
 package com.github.chuross.recyclerviewadapters;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +12,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 
@@ -223,7 +224,8 @@ public class CompositeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         for (LocalAdapter localAdapter : localAdapters) {
-            if (localAdapter.hasStableItemViewType()) localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
+            if (localAdapter.hasStableItemViewType())
+                localAdapterMapping.put(localAdapter.getAdapterId(), localAdapter);
             localAdapter.bindParentAdapter(this, new LocalAdapterDataObserver(this, localAdapter));
             if (recyclerView != null) localAdapter.onAttachedToRecyclerView(recyclerView);
         }

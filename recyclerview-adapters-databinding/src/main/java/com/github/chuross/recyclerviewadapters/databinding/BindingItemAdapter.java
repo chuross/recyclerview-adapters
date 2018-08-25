@@ -2,13 +2,14 @@ package com.github.chuross.recyclerviewadapters.databinding;
 
 
 import android.content.Context;
-import android.databinding.Observable;
-import android.databinding.ObservableField;
-import android.databinding.ObservableList;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 
 import com.github.chuross.recyclerviewadapters.BaseItemAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.Observable;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableList;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public abstract class BindingItemAdapter<I, VH extends RecyclerView.ViewHolder> extends BaseItemAdapter<I, VH> {

@@ -1,26 +1,27 @@
-
 ext {
     versions = [
-        supportLib: '25.1.0',
-        rx: '2.0.1',
-        kotlin: '1.2.21'
+            androidxCore: '1.0.0-rc01',
+            rx          : '2.0.2',
+            kotlin      : '1.2.21'
     ]
 }
 
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.21'
+        classpath 'com.android.tools.build:gradle:3.2.0-rc02'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.60'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        google()
     }
 }
 

@@ -1,12 +1,13 @@
 package com.github.chuross.recyclerviewadapters.internal;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 
 import com.github.chuross.recyclerviewadapters.CompositeRecyclerAdapter;
 import com.github.chuross.recyclerviewadapters.LocalAdapter;
 
 import java.lang.ref.WeakReference;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class LocalAdapterDataObserver extends RecyclerView.AdapterDataObserver {
 

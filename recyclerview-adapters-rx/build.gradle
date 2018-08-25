@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 28
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -23,8 +23,9 @@ android {
 def v = rootProject.ext.versions
 
 dependencies {
-    compile project(':recyclerview-adapters')
-    compile "com.android.support:appcompat-v7:$v.supportLib"
-    provided "io.reactivex.rxjava2:rxjava:$v.rx"
-    provided "io.reactivex.rxjava2:rxandroid:$v.rx"
+    implementation project(':recyclerview-adapters')
+    implementation "androidx.appcompat:appcompat:$v.androidxCore"
+    implementation "androidx.recyclerview:recyclerview:$v.androidxCore"
+    compileOnly "io.reactivex.rxjava2:rxjava:$v.rx"
+    compileOnly "io.reactivex.rxjava2:rxandroid:$v.rx"
 }
