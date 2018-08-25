@@ -1,12 +1,12 @@
 package com.github.chuross.recyclerviewadapters;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-
 import com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils;
 
 import java.util.WeakHashMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import static com.github.chuross.recyclerviewadapters.internal.RecyclerAdaptersUtils.checkNonNull;
 

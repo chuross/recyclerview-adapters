@@ -1,7 +1,8 @@
 package com.github.chuross.recyclerviewadapters.internal;
 
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 public interface EventExecutor {
 

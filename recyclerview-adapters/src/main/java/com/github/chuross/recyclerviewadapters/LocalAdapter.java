@@ -1,8 +1,9 @@
 package com.github.chuross.recyclerviewadapters;
 
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 public interface LocalAdapter<VH extends RecyclerView.ViewHolder> {
 

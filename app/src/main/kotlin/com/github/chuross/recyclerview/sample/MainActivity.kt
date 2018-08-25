@@ -1,13 +1,13 @@
 package com.github.chuross.recyclerview.sample
 
-import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.github.chuross.recyclerview.sample.databinding.ActivityMainBinding
 import com.github.chuross.recyclerviewadapters.*
 import io.reactivex.processors.BehaviorProcessor

@@ -3,15 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 28
+    buildToolsVersion '27.0.3'
 
     dataBinding {
         enabled = true
     }
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -29,13 +29,14 @@ android {
 def v = rootProject.ext.versions
 
 dependencies {
-    compile project(':recyclerview-adapters')
-    compile project(':recyclerview-adapters-rx')
-    compile project(':recyclerview-adapters-databinding')
-    compile "com.android.support:appcompat-v7:$v.supportLib"
-    kapt 'com.android.databinding:compiler:2.3.3'
-    compile "io.reactivex.rxjava2:rxjava:$v.rx"
-    compile "io.reactivex.rxjava2:rxandroid:$v.rx"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$v.kotlin"
-    testCompile 'junit:junit:4.12'
+    implementation project(':recyclerview-adapters')
+    implementation project(':recyclerview-adapters-rx')
+    implementation project(':recyclerview-adapters-databinding')
+    implementation "androidx.appcompat:appcompat:$v.androidxCore"
+    implementation "androidx.recyclerview:recyclerview:$v.androidxCore"
+    kapt 'com.android.databinding:compiler:3.1.4'
+    implementation "io.reactivex.rxjava2:rxjava:$v.rx"
+    implementation "io.reactivex.rxjava2:rxandroid:$v.rx"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$v.kotlin"
+    testImplementation 'junit:junit:4.12'
 }
